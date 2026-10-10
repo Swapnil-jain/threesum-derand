@@ -3,6 +3,15 @@
 Corrections from an independent re-review of the proofs and certificates. None of them changes a theorem, an
 exponent (3SUM 1.995782, all-edges Exact Triangle, (min,+) and APSP 2.995943, k-Clique) or a Lean statement.
 
+## 2026-10-11
+
+- **`stacked_cert.py`, a stale figure (found by Romain Hedouin).** Its Convolution-3SUM line compared against the
+  version 2 exponent 1.995790 instead of the current 1.995782 (Theorem 3). The script, `stacked_cert.out` and
+  `tests/test_certificates.py` now print 1.995782. Only the printed comparison changes; the certified sigma does not.
+- **`check_bands_y.py`, faster (contributed by Romain Hedouin).** The six cases now take about 1 minute of CPU instead
+  of about 20 minutes: the leaf data is computed once for the four modes, the targets are memoised, and the cases
+  run in parallel. The checks and the three must-fail controls are unchanged.
+
 ## 2026-10-10
 
 - **`bands_cert.py`, the b = 1 control.** It was described as "b = 1 gives Theorem A's saving", but the script only
