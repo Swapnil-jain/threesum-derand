@@ -7,6 +7,9 @@ truly subcubic APSP algorithms. Their deterministic bounds are O(n^1.9992) for 3
 conclusion notes that two routes would keep more of their saving: KPP16's reduction for 3SUM, which is randomised,
 and the all-edges version of Exact Triangle for APSP. We make both deterministic, and they keep the whole saving.
 
+**Working on this problem?** Read [docs/CLOSED_IDEAS.md](docs/CLOSED_IDEAS.md) first: it lists the routes we tried
+that do not improve the saving, with the reason for each, so effort is not duplicated. Contributions are welcome.
+
 ## Credits
 
 The method and every lemma used here are Alman and Vassilevska Williams's (arXiv 2610.06783). This release composes
