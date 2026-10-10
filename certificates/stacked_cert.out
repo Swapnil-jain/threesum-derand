@@ -1,0 +1,48 @@
+folded, exact count + pruned encoding (after ImprovedExponents secs. 3-4): CERTIFIED  sigma >= 0.004057248470
+   certified point (exact rationals): c = 2105675159/100000000, theta = 11196129/100000000, eps = 72821473/1250000000
+   unfolded encoding term 1 - eps*E <= -0.010507 (negative: only the folded Lemma 3.2' applies)
+   deterministic all-edges Exact Triangle, (min,+), APSP <= n^(2.995942752+o(1)) = O(n^2.995943)
+Corollaries at this point:
+   deterministic Zero/Min/Max-Weight k-Clique: O(n^(k - 0.004057 floor(k/3))) for every k >= 3
+     k =  3: <= n^(2.995943+o(1)) = O(n^2.995943)
+     k =  4: <= n^(3.995943+o(1)) = O(n^3.995943)
+     k =  5: <= n^(4.995943+o(1)) = O(n^4.995943)
+     k =  6: <= n^(5.991886+o(1)) = O(n^5.991886)
+     k =  7: <= n^(6.991886+o(1)) = O(n^6.991886)
+     k =  8: <= n^(7.991886+o(1)) = O(n^7.991886)
+     k =  9: <= n^(8.987829+o(1)) = O(n^8.987829)
+     k = 10: <= n^(9.987829+o(1)) = O(n^9.987829)
+     k = 11: <= n^(10.987829+o(1)) = O(n^10.987829)
+     k = 12: <= n^(11.983772+o(1)) = O(n^11.983772)
+   Convolution-3SUM through Exact Triangle on n^(1/2) vertices: 2 - sigma/2 <= 1.997972, worse than the direct reduction to 3SUM, 1.995790 (Theorem 3)
+folded, paper lemmas: CERTIFIED  sigma >= 0.003760515625
+   certified point (exact rationals): c = 220136043/10000000, theta = 5613801/50000000, eps = 54758043/1000000000
+   unfolded encoding term 1 - eps*E <= -0.009928 (negative: only the folded Lemma 3.2' applies)
+   deterministic all-edges Exact Triangle, (min,+), APSP <= n^(2.996239485+o(1)) = O(n^2.996240)
+Corollaries at this point:
+   deterministic Zero/Min/Max-Weight k-Clique: O(n^(k - 0.003760 floor(k/3))) for every k >= 3
+     k =  3: <= n^(2.996240+o(1)) = O(n^2.996240)
+     k =  4: <= n^(3.996240+o(1)) = O(n^3.996240)
+     k =  5: <= n^(4.996240+o(1)) = O(n^4.996240)
+     k =  6: <= n^(5.992479+o(1)) = O(n^5.992479)
+     k =  7: <= n^(6.992479+o(1)) = O(n^6.992479)
+     k =  8: <= n^(7.992479+o(1)) = O(n^7.992479)
+     k =  9: <= n^(8.988719+o(1)) = O(n^8.988719)
+     k = 10: <= n^(9.988719+o(1)) = O(n^9.988719)
+     k = 11: <= n^(10.988719+o(1)) = O(n^10.988719)
+     k = 12: <= n^(11.984958+o(1)) = O(n^11.984958)
+   Convolution-3SUM through Exact Triangle on n^(1/2) vertices: 2 - sigma/2 <= 1.998120, worse than the direct reduction to 3SUM, 1.996291 (Theorem 1, paper lemmas)
+control: unfolded, at Theorem 1's point (must give Theorem 1's saving), exact count + pruned encoding (after ImprovedExponents secs. 3-4): CERTIFIED  sigma >= 0.003999294279
+   certified point (exact rationals): c = 2127327/100000, theta = 111731/1000000, eps = 568461449/10000000000
+   deterministic all-edges Exact Triangle, (min,+), APSP <= n^(2.996000706+o(1)) = O(n^2.996001)
+control: folded, eps 1% too large (must FAIL), exact count + pruned encoding (after ImprovedExponents secs. 3-4): FAILED  sigma >= 0.004097820955
+   certified point (exact rationals): c = 2105675159/100000000, theta = 11196129/100000000, eps = 73549687730/1250000000000
+   failed: eps(E+gamma-1/4) < 1
+   unfolded encoding term 1 - eps*E <= -0.020612 (negative: only the folded Lemma 3.2' applies)
+   deterministic all-edges Exact Triangle, (min,+), APSP <= n^(2.995902180+o(1)) = O(n^2.995903)
+   (negative control: it must FAIL) OK
+Comparisons, exact count + pruned encoding, ratios rounded DOWN (our lower bound over the other's upper end):
+   APSP over Theorem 1 (sigma <= 0.003999289714): x1.0144
+   APSP over the paper's deterministic APSP (eps'/3 = 0.00175/3): x6.955
+   Exact Triangle over the paper's deterministic Exact Triangle (eps' = 0.00175): x2.318
+ALL OK

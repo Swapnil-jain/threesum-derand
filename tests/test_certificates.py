@@ -1,4 +1,5 @@
-"""Runs every certificate once and checks the values it prints against the claims of README.md.
+"""Runs every certificate once and checks the values it prints against the claims of README.md (the band-gain scripts
+of Theorem 3 are in test_bands.py).
 
 Each script is run as a subprocess with the same interpreter, its output is echoed, and the claimed lines must appear
 verbatim. A script that prints FAILED anywhere, or exits non-zero, fails the test.
@@ -9,14 +10,16 @@ CERTS = pathlib.Path(__file__).resolve().parents[1] / "certificates"
 _cache = {}
 
 
-def run(script):
-    if script not in _cache:
-        r = subprocess.run([sys.executable, str(CERTS / script)], capture_output=True, text=True, cwd=CERTS)
-        sys.stdout.write(f"\n--- {script} ---\n{r.stdout}")
-        if r.returncode != 0:
-            sys.stdout.write(r.stderr)
-        _cache[script] = r
-    return _cache[script]
+def run(script, *flags):
+    key = (script, flags)
+    if key not in _cache:
+        r = subprocess.run([sys.executable, *flags, str(CERTS / script)], capture_output=True, text=True, cwd=CERTS)
+        if not flags:
+            sys.stdout.write(f"\n--- {script} ---\n{r.stdout}")
+            if r.returncode != 0:
+                sys.stdout.write(r.stderr)
+        _cache[key] = r
+    return _cache[key]
 
 
 class Claims(unittest.TestCase):
@@ -24,8 +27,57 @@ class Claims(unittest.TestCase):
         r = run(script)
         self.assertEqual(r.returncode, 0, r.stderr)
         self.assertNotIn("FAILED", r.stdout)
+        self.check_lines(script, *lines)
+
+    def check_lines(self, script, *lines):
+        r = run(script)
+        self.assertEqual(r.returncode, 0, r.stderr)
         for line in lines:
             self.assertIn(line, r.stdout)
+
+    def test_folded_route(self):
+        # Theorem A' (proofs/stacked.md). The one FAILED line is the control with eps 1% too large.
+        r = run("stacked_cert.py")
+        self.assertEqual(r.returncode, 0, r.stderr)
+        for line in ("folded, exact count + pruned encoding (after ImprovedExponents secs. 3-4): CERTIFIED  sigma >= 0.004057248470",
+                     "certified point (exact rationals): c = 2105675159/100000000, theta = 11196129/100000000, eps = 72821473/1250000000",
+                     "deterministic all-edges Exact Triangle, (min,+), APSP <= n^(2.995942752+o(1)) = O(n^2.995943)",
+                     "folded, paper lemmas: CERTIFIED  sigma >= 0.003760515625",
+                     "deterministic all-edges Exact Triangle, (min,+), APSP <= n^(2.996239485+o(1)) = O(n^2.996240)",
+                     "unfolded encoding term 1 - eps*E <= -0.010507",
+                     "control: unfolded, at Theorem 1's point (must give Theorem 1's saving), exact count + pruned encoding (after ImprovedExponents secs. 3-4): CERTIFIED  sigma >= 0.003999294279",
+                     "failed: eps(E+gamma-1/4) < 1",
+                     "(negative control: it must FAIL) OK",
+                     "APSP over Theorem 1 (sigma <= 0.003999289714): x1.0144",
+                     "APSP over the paper's deterministic APSP (eps'/3 = 0.00175/3): x6.955",
+                     "Exact Triangle over the paper's deterministic Exact Triangle (eps' = 0.00175): x2.318",
+                     "ALL OK"):
+            self.assertIn(line, r.stdout)
+        self.assertEqual(r.stdout.count(": FAILED"), 1)
+        self.assertNotIn("WRONG", r.stdout)
+
+    def test_kclique_corollary(self):
+        self.check_lines("stacked_cert.py",
+                         "deterministic Zero/Min/Max-Weight k-Clique: O(n^(k - 0.004057 floor(k/3))) for every k >= 3",
+                         "k =  6: <= n^(5.991886+o(1)) = O(n^5.991886)",
+                         "k =  9: <= n^(8.987829+o(1)) = O(n^8.987829)",
+                         "k = 12: <= n^(11.983772+o(1)) = O(n^11.983772)",
+                         "deterministic Zero/Min/Max-Weight k-Clique: O(n^(k - 0.003760 floor(k/3))) for every k >= 3",
+                         "Convolution-3SUM through Exact Triangle on n^(1/2) vertices: 2 - sigma/2 <= 1.997972, worse than "
+                         "the direct reduction to 3SUM, 1.995790 (Theorem 3)")
+
+    def test_folded_mechanical(self):
+        self.check("check_stacked.py",
+                   "Lemma 3.2' folded instance: 24746 slots checked, mismatches 0",
+                   "negative controls (must be > 0): no x*M0 shift 4478, wrong sign of y 16697")
+
+    def test_folded_saved_outputs_and_guards(self):
+        for script in ("stacked_cert.py", "check_stacked.py"):
+            with self.subTest(script=script):
+                self.assertEqual(run(script).stdout, (CERTS / script.replace(".py", ".out")).read_text())
+                r = run(script, "-O")
+                self.assertNotEqual(r.returncode, 0)
+                self.assertIn("refusing to run under python -O", r.stderr)
 
     def test_derandomised_route(self):
         self.check("derand_cert.py",

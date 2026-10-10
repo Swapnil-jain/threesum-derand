@@ -1,5 +1,6 @@
 import ThreesumLean.Points
 import ThreesumLean.Finite
+import ThreesumLean.KClique
 
 /-! Every checked theorem depends only on Lean's standard axioms (no `sorryAx`, no `native_decide`). -/
 
@@ -17,3 +18,11 @@ import ThreesumLean.Finite
 #print axioms TS.a2_exhaustive_B4
 #print axioms TS.unique_witness
 #print axioms TS.minplus_step
+#print axioms TS.stacked_T4
+#print axioms TS.stacked_T1
+#print axioms TS.stacked_T4_fails_next_s0
+#print axioms TS.stacked_T4_unfolded_enc_neg
+#print axioms TS.kclique_T4_uniform
+#print axioms TS.kclique_T4_table
+#print axioms TS.kclique_T1_uniform
+#print axioms TS.conv3sum_via_ET_T4
