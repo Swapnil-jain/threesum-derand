@@ -8,9 +8,9 @@ This work builds on, and does not modify, the following:
   lem:realred and lem:cmp, the k-Clique folding), and the conclusion footnote that names the two routes made
   deterministic here. Their main theorems are Lean-formalised by Anthropic (anthropics/formal-math, 3sum-apsp).
 - qawbecrdtey, github.com/qawbecrdtey/ImprovedExponents (published 2026-10-07, Lean): the exact leaf count and the
-  pruned encodings (its Sections 3 and 4), used in every figure labelled "exact count + pruned encodings", and a
-  Lean-checked (min,+) to all-edges Exact Triangle chain. We found the same re-tune improvements independently, but
-  theirs came first.
+  pruned encodings (its Sections 3 and 4), used in every figure labelled "exact count + pruned encoding (after
+  ImprovedExponents secs. 3-4)", and a Lean-checked (min,+) to all-edges Exact Triangle chain. We found the same
+  re-tune improvements independently, but theirs came first.
 - Timothy M. Chan and Moshe Lewenstein, STOC 2015 (arXiv 1502.05204): the deterministic pseudo-perfect
   pseudo-additive family, built from small primes chosen one at a time by averaging over the survivors. Our chains
   follow this construction. Earlier: Jeanette P. Schmidt and Alan Siegel, SIAM J. Comput. 1990, and Noga Alon and

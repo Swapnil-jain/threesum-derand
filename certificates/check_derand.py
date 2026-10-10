@@ -11,6 +11,104 @@ def Kmax(bound): # max number of primes in P dividing a nonzero |k|<=bound
         for c in itertools.combinations(P,r):
             if math.prod(c)<=bound: best=max(best,r)
     return best
+def first_primes_prod(bound):
+    out=[];p=2
+    while math.prod(out)<=bound:
+        if all(p%d for d in range(2,int(p**.5)+1)): out.append(p)
+        p+=1
+    return out
+# ---------- stress test of the greedy choice and the halving lemmas ----------
+# With chain primes in [20, 40) and small U the chain moduli soon exceed 3U, so the modulus test becomes exact and
+# the greedy choice never matters. Here the primes are in [20, 200), U = 10^5, and every input is a multiple of
+# 23*29 (or 23*29*31), so the smallest chain primes divide every k and the greedy minimum must avoid them. Every
+# chain modulus is asserted to stay below 0.35 * 3U, so no chain is an exact zero test by itself.
+SP = primes(20, 200); SU = 10**5
+def kmax_sorted(Pr, bound):  # most primes of Pr dividing one nonzero |k| <= bound: the smallest ones give the max
+    r, prod = 0, 1
+    for p in sorted(Pr):
+        if prod*p > bound: break
+        prod *= p; r += 1
+    return r
+SRHO = kmax_sorted(SP, 3*SU)/len(SP)   # Lemma 2.2: at most this fraction of SP divides a nonzero k/m'
+def greedy_choice(phi):          # the proof's rule: the minimiser of the potential, ties to the smallest prime
+    return min(SP, key=lambda p: (phi(p), p))
+def worst_small_choice(phi):     # bad-prime control: the worst of the three smallest primes
+    return max(sorted(SP)[:3], key=lambda p: (phi(p), -p))
+def fkp_cover(G, R):  # Lemma 2.3(ii) with the corrected ranges, 1-indexed blocks
+    chains = {}
+    for i in range(1, G+1):
+        for j in range(1, G+1):
+            for k in range(1, G+1):
+                u, v = j - i, k + i
+                assert 1 - G <= u <= G - 1 and 2 <= v <= 2*G
+                chains.setdefault((u, v), []).append((i, j, k))
+    assert len(chains) <= (2*G - 1)**2
+    for ch in chains.values():   # each chain is ordered (i up, j up, k down) and holds at most one nontrivial triple
+        assert sum(1 for (i, j, k) in ch if (i-1, j-1, k-1) in R) <= 1
+def threesum_stress(A, B, C, s, choose):
+    """Returns (answer, halving violations). Halving is Lemma 2.5, stated for the queries without a solution:
+    |S_l minus Z| <= |S_{l-1}|/4 (equal to the lemma on no-instances)."""
+    V = sorted(set(A) | set(B) | set(C)); blocks = [V[i:i+s] for i in range(0, len(V), s)]; G = len(blocks)
+    grp = {v: i for i, b in enumerate(blocks) for v in b}
+    Bi = [[b for b in B if grp[b] == i] for i in range(G)]; Ci = [[c for c in C if grp[c] == i] for i in range(G)]
+    mn = [b[0] for b in blocks]; mx = [b[-1] for b in blocks]
+    R = {(i, j, k) for i in range(G) for j in range(G) for k in range(G) if not (mn[i]+mn[j] > mx[k] or mx[i]+mx[j] < mn[k])}
+    fkp_cover(G, R)
+    Q = [(a, i, j, k) for (i, j, k) in R for a in A if grp[a] == i]
+    ks = {q: [q[0]+b-c for b in Bi[q[2]] for c in Ci[q[3]]] for q in Q}
+    Z = {q for q in Q if 0 in ks[q]}
+    N = lambda m, q: sum(1 for x in ks[q] if x % m == 0)
+    r = 1
+    while s*s*SRHO**r > 0.25: r += 1
+    L = math.ceil(math.log2(len(Q)+1)); S = list(Q); viol = 0
+    for _ in range(L):
+        m = 1
+        for _ in range(r): m *= choose(lambda p: sum(N(m*p, q) for q in S))
+        assert m < 0.35*3*SU
+        new = [q for q in S if N(m, q) >= 1]
+        viol += len([q for q in new if q not in Z]) > len(S)/4
+        S = new
+    return len(S) > 0, viol
+def et_stress(w, n, s, choose):
+    """Returns (all-edges answer, halving violations, zero-free slots left in T). Lemma 3.5 is asserted by the caller."""
+    Pi = first_primes_prod(3*SU); assert max(Pi) < min(SP)
+    h = lambda S: sum(1 for p in Pi if S % p)
+    pieces = [list(range(i, min(n, i+s))) for i in range(0, n, s)]
+    Q = [(a, b, k) for a in range(n) for b in range(n) for k in range(len(pieces))]
+    Sv = {q: [w['ab'][q[0]][q[1]]+w['bc'][q[1]][c]+w['ca'][c][q[0]] for c in pieces[q[2]]] for q in Q}
+    NM = lambda M, q: sum(1 for x in Sv[q] if x % M == 0)
+    HM = lambda M, q: sum(h(x) for x in Sv[q] if x % M == 0)
+    t = len(Pi); r = 1
+    while s*t*SRHO**r > 0.5: r += 1
+    L = math.ceil(math.log2(len(Q)+1)); Sp = list(Q); T = set(Q); viol = 0
+    for _ in range(L):
+        m = 1
+        for _ in range(r): m *= choose(lambda p: sum(HM(m*p, q) for q in Sp))
+        assert m < 0.35*3*SU and all(m % p for p in Pi)
+        for q in Sp: assert HM(m, q) == sum(NM(m, q) - NM(m*p, q) for p in Pi)   # Lemma 3.3
+        new = [q for q in Sp if HM(m, q) >= 1]
+        viol += len(new) > len(Sp)/2
+        Sp = new; T = {q for q in T if NM(m, q) >= 1}
+    zero_free_in_T = sum(1 for q in T if 0 not in Sv[q])
+    return [[any((a, b, k) in T for k in range(len(pieces))) for b in range(n)] for a in range(n)], viol, zero_free_in_T, Sp
+def stress_3sum_instances(rng, count):
+    for _ in range(count):
+        base = 667 * rng.choice([1, 1, 31]); vals = range(-(SU//base)*base, SU+1, base)
+        n = rng.randint(2, 6); A, B, C = (rng.sample(vals, n) for _ in range(3))
+        if rng.random() < 0.3:
+            x = A[0] + B[-1]
+            if abs(x) <= SU and x not in C: C[0] = x
+        yield A, B, C, rng.randint(1, 3)
+def stress_et_instances(rng, count):
+    for _ in range(count):
+        base = 667 * rng.choice([1, 1, 31]); n = rng.randint(2, 5)
+        rw = lambda: [[base*rng.randint(-(SU//base), SU//base) for _ in range(n)] for _ in range(n)]
+        w = {'ab': rw(), 'bc': rw(), 'ca': rw()}
+        for _ in range(rng.randint(0, 3)):
+            a, b, c = rng.randrange(n), rng.randrange(n), rng.randrange(n); v = -(w['bc'][b][c]+w['ca'][c][a])
+            if abs(v) <= SU: w['ab'][a][b] = v
+        yield w, n, rng.randint(1, 3)
+def brute3(A,B,C): return any(a+b in set(C) for a in A for b in B)
 # ---------- 3SUM (sec. 2) ----------
 def threesum(A,B,C,U,g):
     V=sorted(set(A)|set(B)|set(C)); bs=math.ceil(len(V)/g); blocks=[V[i:i+bs] for i in range(0,len(V),bs)]
@@ -38,7 +136,6 @@ def threesum(A,B,C,U,g):
             m*=min(P,key=lambda p:(sum(N(m*p,q) for q in S),p))
         S=[q for q in S if N(m,q)>=1]
     return len(S)>0
-def brute3(A,B,C): return any(a+b in set(C) for a in A for b in B)
 bad=0; yes=0
 for it in range(300):
     U=200; n=random.randint(2,9)
@@ -48,12 +145,6 @@ for it in range(300):
     if threesum(A,B,C,U,g=random.randint(1,4))!=t: bad+=1
 print("3SUM: instances 300, yes",yes,"mismatches",bad)
 # ---------- all-edges ET (sec. 3) ----------
-def first_primes_prod(bound):
-    out=[];p=2
-    while math.prod(out)<=bound:
-        if all(p%d for d in range(2,int(p**.5)+1)): out.append(p)
-        p+=1
-    return out
 def allEdgesET(w,n,U,s):
     Pi=first_primes_prod(3*U); assert max(Pi)<min(P)
     h=lambda S: sum(1 for p in Pi if S%p)
@@ -123,4 +214,19 @@ for it in range(150):
     C=[[min(A[i][k]+B[k][j] for k in range(n)) for j in range(n)] for i in range(n)]
     if minplus(A,B,V,n)!=C: bad+=1
 print("(min,+) via all-edges ET: instances 150, mismatches",bad)
-# negative control: drop the k-free instance (the v+t = tau-1 case) -> must fail somewhere
+# ---------- stress run (greedy choice and halving exercised) ----------
+srng = random.Random(23); bad = yes = 0
+for A, B, C, s in stress_3sum_instances(srng, 120):
+    t = brute3(A, B, C); yes += t
+    got, viol = threesum_stress(A, B, C, s, greedy_choice)
+    assert viol == 0          # Lemma 2.5 on every chain
+    bad += got != t
+print("stress 3SUM (primes in [20,200), U=1e5, inputs multiples of 667): instances 120, yes", yes, "mismatches", bad)
+bad = pos = 0
+for w, n, s in stress_et_instances(srng, 60):
+    br = [[any(w['ab'][a][b]+w['bc'][b][c]+w['ca'][c][a] == 0 for c in range(n)) for b in range(n)] for a in range(n)]
+    pos += sum(map(sum, br))
+    got, viol, zf, Sp = et_stress(w, n, s, greedy_choice)
+    assert viol == 0 and zf == 0 and not Sp   # Lemma 3.5 on every chain, S'_L empty, Lemma 3.6
+    bad += got != br
+print("stress all-edges ET: instances 60, positive pairs", pos, "mismatches", bad)

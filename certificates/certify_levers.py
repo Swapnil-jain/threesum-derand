@@ -26,7 +26,7 @@ def route_A(name, c, th, eps, boxes, enc):
 
 
 if __name__ == "__main__":
-    route_A("route A, exact count + pruned encodings", "21.27326", "0.111731", "0.0568461", "exact", "pruned")
+    route_A("route A, exact count + pruned encoding (after ImprovedExponents secs. 3-4)", "21.27326", "0.111731", "0.0568461", "exact", "pruned")
     route_A("route A, exact count", "20.78856", "0.112251", "0.0572427", "exact", "full")
     route_A("route A, paper lemmas", "22.21828", "0.112064", "0.0535127", "rho", "full")
     P = json.load(open(os.path.join(HERE, "params.json")))["exact_count_free_density_pruned_encoding"]

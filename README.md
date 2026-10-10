@@ -21,7 +21,8 @@ their thin-product theorem with known reductions. In detail:
   the counting oracle, which replaces KPP16's AND of random hashes without losing any of the saving; and the
   all-edges weight H, whose zero test by small primes (Chinese remaindering) is folklore.
 - **ImprovedExponents** (github.com/qawbecrdtey/ImprovedExponents, 2026-10-07): the exact leaf count and the pruned
-  encodings behind every figure labelled "exact count + pruned encodings", including 1.996001. We found them
+  encodings behind every figure labelled "exact count + pruned encoding (after ImprovedExponents secs. 3-4)",
+  including 1.996001. We found them
   independently, but they were public first, with a Lean formalisation. With the paper's lemmas alone our bound is
   1.996291.
 - Kopelowitz, Pettie and Porat 2016 (KPP16): 3SUM to offline Set Disjointness and the AND over hashes.
@@ -64,15 +65,21 @@ Model throughout: word RAM with Theta(log n)-bit words, integer inputs in [-n^nu
 Running times are worst case. Exponents are upper bounds rounded **up** from exact arb endpoints, and each O(n^e)
 has e strictly above the certified value, so it absorbs every n^{o(1)} factor. Savings are rounded **down**.
 
-**Theorem 1 (derandomised route; `proofs/derandomisation.md`).** There are deterministic algorithms that
-- decide 3SUM in **O(n^1.996001)**;
-- solve all-edges Exact Triangle, the (min,+) product and APSP (no negative cycles) in **O(n^2.996001)**.
+**Theorem 1 (derandomised route; `proofs/derandomisation.md`).** On the word RAM with Theta(log n)-bit words and
+integer inputs in [-n^nu, n^nu] (nu >= 1 constant), there are deterministic algorithms with worst-case running times:
+3SUM in O(n^{1.996001}); all-edges Exact Triangle, (min,+)-product and APSP (no negative cycles) in O(n^{2.996001}).
+More generally n^{2 - sigma + o(1)} and n^{3 - sigma + o(1)} with sigma = min(eps gamma, eps(1/2 - q)) for rational
+c > 10, 0 < theta < 0.9 and 0 < eps < 1/(E + gamma). Using only the lemmas of Alman and Vassilevska Williams
+(cor:tradeoff), the exponents are 1.996291 and 2.996291; the 1.996001 / 2.996001 figures also use the exact leaf
+count and pruned encodings of ImprovedExponents. Credit: KPP16 (Set Disjointness shape), FKP24 (interval groups,
+prime-at-a-time moduli), the paper (Thm 17 instances, counting false positives with the oracle), VW10/VW18 and VW13
+(the (min,+) chain), ImprovedExponents (the oracle tier and the Lean-checked all-edges APSP chain). New: the
+survivor-restricted greedy chains and the weight H.
 
-More generally the times are n^{2 - sigma + o(1)} and n^{3 - sigma + o(1)} with sigma = min(eps gamma, eps(1/2 - q)),
-for rational c > 10, 0 < theta < 0.9 and 0 < eps < 1/(E + gamma). Using only the paper's lemmas (its Cor.
-`cor:tradeoff`), the exponents are 1.996291 and 2.996291 (sigma >= 0.003709895012). The figures 1.996001 / 2.996001
-(sigma >= 0.003999289713) also use ImprovedExponents' exact leaf count and pruned encodings. The 3SUM algorithm is a
-decision algorithm; a solution costs O(log n) more decisions, and we claim no listing or All-Numbers version.
+The certified savings are sigma >= 0.003709895012 (paper lemmas) and sigma >= 0.003999289713 (exact count + pruned
+encoding (after ImprovedExponents secs. 3-4)), at exact rational points. The survivor-restricted greedy chains are new
+only in their criterion; the construction itself is known (Credits). The 3SUM algorithm is a decision algorithm; a
+solution costs O(log n) more decisions, and we claim no listing or All-Numbers version.
 
 **Theorem 2 (hash-free route L1; `proofs/l1.md`).** Deterministic all-edges Exact Triangle, (min,+) product and APSP
 in O(n^2.99633), and 3SUM in O(n^1.99633) (S >= 0.003677999). With the paper's lemmas only: O(n^2.99657) and
@@ -91,12 +98,12 @@ eps' = 0.00175 behind 2.9983 for Exact Triangle. Ratios are rounded down.
 | model / problem | paper | ours | delta (paper) | delta (ours) | ratio |
 |---|---|---|---|---|---|
 | deterministic 3SUM | 1.9992 | **1.996001** (Theorem 1) | 0.000875 | 0.0039992 | x4.57 |
-| | | 1.996291 (Theorem 1, paper lemmas only) | | 0.0037098 | x4.23 |
+| | | 1.996291 (Theorem 1, paper lemmas) | | 0.0037098 | x4.23 |
 | | | 1.99633 (Theorem 2) | | 0.0036779 | x4.20 |
 | deterministic Exact Triangle | 2.9983 (decision) | **2.996001** (Theorem 1, all-edges) | 0.00175 | 0.0039992 | x2.28 |
 | | | 2.99633 (Theorem 2, all-edges) | | 0.0036779 | x2.10 |
 | deterministic (min,+) / APSP | 2.99942 | **2.996001** (Theorem 1) | 0.000583 | 0.0039992 | x6.85 |
-| | | 2.996291 (Theorem 1, paper lemmas only) | | 0.0037098 | x6.35 |
+| | | 2.996291 (Theorem 1, paper lemmas) | | 0.0037098 | x6.35 |
 | | | 2.99633 (Theorem 2) | | 0.0036779 | x6.30 |
 | Las Vegas APSP / ET, integer weights | 2.998 (real RAM, `thm:real`) | 2.99601 (remark) | 0.002 | 0.0039992 | x1.99 |
 
@@ -150,14 +157,14 @@ bind together (`certify_L1.py`).
 
 | item | status |
 |---|---|
-| Theorem 1 (`derandomisation.md`) | Full written proof. Two adversarial reviews: the first checked a sketch step by step; the second checked the full text, including the APSP chain, and found it correct (its qualifier and four textual fixes are applied) |
+| Theorem 1 (`derandomisation.md`) | Full written proof. Two adversarial reviews: the first checked a sketch step by step; the second checked the full text, including the APSP chain, and found it correct (its qualifier, four textual fixes and stronger stress test are applied) |
 | Theorem 2, L1 (`l1.md`) | Full written proof; one adversarial review, after two fixes (3SUM window [-7, 8]; Alon-Naor bias 2^{-7c-1} for 3SUM) |
 | Corollaries | Compositions of Theorems 1 and 2 with the cited reductions; not separately reviewed |
 | Remark, Las Vegas route (Appendix B) | Proof; one adversarial review |
 | Exact count and pruned encodings (Appendix A) | Short arguments on the paper's construction; reviewed once; public earlier, Lean-checked, in ImprovedExponents |
 | All saving values | arb ball arithmetic (200 bits) at fixed rational points, every side condition checked on the whole ball (`certificates/`) |
 | Negative triangle to Exact Triangle (Appendix C) | Proof; exhaustive and end-to-end checks against brute force with a negative control (`check_negtri.py`) |
-| Theorem 1's constructions on small instances | Mechanical check against brute force, with two negative controls (`check_derand.py`, `check_derand_controls.py`) |
+| Theorem 1's constructions on small instances | Mechanical check against brute force, including a stress run that exercises the greedy choice and asserts the halving lemmas on every chain, with three negative controls that must fail (`check_derand.py`, `check_derand_controls.py`) |
 | Lean | **Pending.** A Lean 4 kernel check of the certificates is being built and is not included yet |
 | The paper's theorems | Assumed as published (its main theorems are Lean-formalised in anthropics/formal-math) |
 | 3XOR, All-Numbers 3SUM | Sketches only, unverified; not claimed |
@@ -181,7 +188,7 @@ make certificates # the certificates and checks alone, printing every claim
 | `certificates/certify_levers.py` | the Las Vegas remark, and the paper's single-prime route with Appendix C for comparison |
 | `certificates/certify.py` | the shared closed forms, and the paper's Theorem 17 route re-tuned (comparison only) |
 | `certificates/check_negtri.py` | Appendix C: identity, full reduction against brute force, negative control |
-| `certificates/check_derand.py`, `check_derand_controls.py` | Theorem 1's constructions against brute force, and two controls that must fail |
+| `certificates/check_derand.py`, `check_derand_controls.py` | Theorem 1's constructions against brute force (basic and stress runs), and three controls that must fail |
 
 `tests/test_certificates.py` runs each script once and checks its printed values against this README.
 

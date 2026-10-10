@@ -1,14 +1,15 @@
 # Deterministic 3SUM, all-edges Exact Triangle and APSP at the full thin-product saving
 
 Base result: Alman and Vassilevska Williams, arXiv 2610.06783 ("the paper", AVW). Certificate:
-`certificates/derand_cert.py` (arb, 200 bits, directed rounding). Mechanical check on small instances:
-`certificates/check_derand.py` and `check_derand_controls.py` (Sec. 5).
+`certificates/derand_cert.py` (arb, 200 bits, directed rounding, exact rational parameters). Mechanical check on
+small instances: `certificates/check_derand.py` and `check_derand_controls.py` (Sec. 5).
 
 **Review status.** A sketch of Sections 2 and 3 was checked step by step by one adversarial review, which found no
 gap. This complete write-up, including Section 4, then had a second adversarial review. Verdict: **the proof is
-correct; no gap that touches the theorem or the exponents.** It asked for one qualifier (c and theta rational for the
-exact count) and four textual fixes (the chain index range in Lemma 2.3, the bound on P_t in Lemma 3.1, the family
-count in Lemma 3.7, and the tier names); all are applied here.
+correct; no gap that touches the theorem or the exponents.** It asked for one qualifier (c and theta rational) and four
+textual fixes (the chain index range in Lemma 2.3, the bound on P_t in Lemma 3.1, the family count in Lemma 3.7, and
+the tier names), and it found the mechanical check of the chains too weak; the fixes and its stronger stress test
+are applied here.
 
 ## 0. Statement
 
@@ -16,18 +17,25 @@ count in Lemma 3.7, and the tier names); all are applied here.
 for a constant nu >= 1 (the paper's setting). Every algorithm below is deterministic, and its time bound holds for
 every input.
 
-*Saving.* For a tier tau ("paper lemmas" or "exact count + pruned encodings") and constants c > 10,
-0 < theta < 0.9, eps > 0 (c and theta rational for the second tier), let gamma = gamma_tau(c, theta),
-q = q(theta), E = E_tau(c) (Sec. 1, Theorem O) and
+*Oracle tiers.* Two versions of the oracle (Sec. 1, Theorem O) are used, named by what they rest on:
+- "paper lemmas": the paper's Corollary `cor:tradeoff` alone;
+- "exact count + pruned encoding (after ImprovedExponents secs. 3-4)": the same proof with the exact leaf count and
+  the pruned encodings (Appendix A).
+
+*Saving.* For an oracle tier tau and **rational** constants c > 10, 0 < theta < 0.9, eps > 0, let
+gamma = gamma_tau(c, theta), q = q(theta), E = E_tau(c) (Sec. 1, Theorem O) and
 
     sigma = min( eps*gamma, eps*(1/2 - q) ),   subject to   eps*(E + gamma) < 1.
 
 (The constraint says the encoding term 1 - eps E is larger than eps gamma, so the minimum is the same as
-min(eps gamma, eps(1/2 - q), 1 - eps E).)
+min(eps gamma, eps(1/2 - q), 1 - eps E).) Rationality is needed for the exact-count tier (its proof takes m a
+multiple of the denominators of c and theta); for the paper-lemma tier it is harmless. For irrational values the
+statement holds with every sigma' < sigma, by approximating (c, theta) by rationals.
 
-**Theorem A.** For every constant nu >= 1 and every admissible (tau, c, theta, eps), on the word RAM above:
+**Theorem A.** For every constant nu >= 1, either oracle tier tau, and all rational (c, theta) and eps admissible as
+above, on the word RAM above:
 - (a) 3SUM (sets A, B, C of at most n integers in [-n^nu, n^nu]; is there a + b = c with a in A, b in B, c in C?)
-  is **decided** deterministically in time n^{2 - sigma + o(1)};
+  is solved deterministically in time n^{2 - sigma + o(1)};
 - (b) all-edges Exact Triangle (complete tripartite graph on A, B, C with n vertices each and integer weights in
   [-n^nu, n^nu]; for every (a, b) in A x B, is there c in C with w(a,b) + w(b,c) + w(c,a) = 0?) is solved
   deterministically in time n^{3 - sigma + o(1)};
@@ -35,18 +43,16 @@ min(eps gamma, eps(1/2 - q), 1 - eps E).)
   [-n^nu, n^nu], and APSP on directed n-vertex graphs with integer weights in [-n^nu, n^nu] and no negative cycle, are
   solved deterministically in time n^{3 - sigma + o(1)}.
 
-Part (a) is a decision algorithm. A solution can be found with O(log n) further decisions (halve A and keep a half
-that still answers YES), but the route gives no listing or All-Numbers version, and we claim none.
+**Corollary B (values; exponents rounded up from the exact arb endpoints).** The parameters are exact rationals
+(c = 2221832/100000 etc. in `derand_cert.py`), so Theorem A applies to them as stated.
 
-**Corollary B (values; exponents rounded up from the exact arb endpoints).**
-
-| tier | (c, theta, eps) | sigma >= | 3SUM | all-edges ET, (min,+), APSP |
+| oracle tier | (c, theta, eps), exact decimals | sigma >= | 3SUM | all-edges ET, (min,+), APSP |
 |---|---|---|---|---|
-| paper lemmas only (Cor. `cor:tradeoff`) | (22.21832, 0.112064, 0.05351255) | 0.003709895012 | O(n^{1.996291}) | O(n^{2.996291}) |
-| exact count + pruned encodings (Appendix A) | (21.27327, 0.111731, 0.05684608) | 0.003999289713 | O(n^{1.996001}) | O(n^{2.996001}) |
+| paper lemmas (Cor. `cor:tradeoff` only) | (22.21832, 0.112064, 0.05351255) | 0.003709895012 | O(n^{1.996291}) | O(n^{2.996291}) |
+| exact count + pruned encoding (after ImprovedExponents secs. 3-4; Appendix A) | (21.27327, 0.111731, 0.05684608) | 0.003999289713 | O(n^{1.996001}) | O(n^{2.996001}) |
 
 Nine-digit upper ends: 1.996290105 / 2.996290105 (paper lemmas) and 1.996000711 / 2.996000711 (exact count + pruned
-encodings). The n^{o(1)} is absorbed
+encoding). The n^{o(1)} is absorbed
 because each printed exponent is strictly above 2 - sigma (resp. 3 - sigma). The paper's bounds in this model:
 3SUM 1.9992, Exact Triangle 2.9983, APSP 2.99942 (its Theorem `thm:3sumapsp`).
 
@@ -58,17 +64,19 @@ paper's (Theorem 17 instances; its conclusion footnote says that KPP16 keeps all
 through the all-edges version). The interval groups are FKP24 Lemma 3.3, the sets are FKP24's proof of Theorem 1.3,
 the prime-at-a-time moduli are FKP24 Lemma 3.2, and counting false positives with the oracle is the paper's footnote
 to Theorem 17. The (min,+) to all-edges Exact Triangle chain is VW10/VW18 (simultaneous binary search) plus VW13
-(comparisons as equalities); it is also published, Lean-checked, in ImprovedExponents (2026-10-07). The exact leaf
-count and the pruned encodings are ImprovedExponents' as well (its Sections 3 and 4; Appendix A here).
+(comparisons as equalities); it is also published, Lean-checked, in ImprovedExponents (2026-10-07, Prop.
+`minplus-math` and Thm `pairs` of its paper). The exact count + pruned encoding oracle tier is ImprovedExponents' as
+well (its Sections 3 and 4: exact leaf count and pruned encodings; Appendix A here).
 
-The chains follow Chan and Lewenstein's deterministic construction of a pseudo-perfect family (CL15, proof of the
+The chains of Sec. 2 are a known technique applied in a new setting. They follow Chan and Lewenstein's deterministic construction of a pseudo-perfect family (CL15, proof of the
 FFT Lemma): hashes made of small primes chosen one at a time, each by averaging over the elements that no earlier hash
 has handled; the pattern goes back to greedy covering by conditional expectations (Schmidt and Siegel 1990; AN96
 Sec. 4), and Fischer (STOC 2026) uses it recently for a deterministic Exact Triangle subroutine. The authors' footnote
-to Theorem 17 suggests choosing the modulus prime by prime with oracle counts. **New here:** the per-prime criterion
-counts the false positives (pseudo-solutions) of the surviving queries with the #Lop oracle, which lets the
-construction replace KPP16's AND without losing any of the saving; and the all-edges weight H (Sec. 3), whose zero
-test by the first few primes (Chinese remaindering) is folklore. KPP16 wrote that "it would be surprising if our
+to Theorem 17 suggests choosing the modulus prime by prime with oracle counts. **New here, in Sec. 2:** the per-prime
+criterion, which counts the 3-term false positives (pseudo-solutions) of the surviving queries with the #Lop oracle;
+this lets the construction replace KPP16's AND without losing any of the saving. **New in Sec. 3:** the all-edges
+weight H. Its ingredient, that a nonzero |S| <= 3U is detected by the first t primes because their product exceeds
+3U (a Chinese-remainder zero test), is folklore. KPP16 wrote that "it would be surprising if our
 construction could be efficiently derandomized"; FKP24 derandomised it with a smaller saving.
 
 ## 1. The oracle: wanted entries of a thin product
@@ -76,15 +84,20 @@ construction could be efficiently derandomized"; FKP24 derandomised it with a sm
 Notation. H(x) = -x ln x - (1-x) ln(1-x). For c > 10, 0 < theta < 0.9:
 - q(theta) = (H(theta) + theta ln 9)/ln 4;
 - paper lemmas: gamma = theta ln((c-1)/9)/ln 4, E = (c ln 10 - (c/2) H(1/c) - (c-1) ln 3)/ln 4;
-- exact count + pruned encodings (c, theta rational): gamma = (c H(1/c) - c H((1-theta)/c) - theta ln 9)/ln 4, E = ((c/2) H(1/c) + (c-1) ln 3)/ln 4.
+- exact count + pruned encoding: gamma = (c H(1/c) - c H((1-theta)/c) - theta ln 9)/ln 4, E = ((c/2) H(1/c) + (c-1) ln 3)/ln 4.
 
-**Theorem O.** Fix a tier, c, theta, and eps0 with 0 < eps0 < 1/(E + gamma). There is a deterministic algorithm that,
+**Theorem O.** Fix an oracle tier, c, theta, and eps0 with 0 < eps0 < 1/(E + gamma). There is a deterministic algorithm that,
 given X in Z^{N x D} and Y in Z^{D x N} with entries of absolute value N^{O(1)}, 2 <= D <= N^{eps0}, and a set W of
 positions of an N x N matrix, outputs (XY)[I,J] for all (I,J) in W in time O((N^2 D^{-gamma} + |W| D^q) log^2 D).
 
 *Source.* Paper lemmas: this restates the paper's Corollary `cor:tradeoff` (preprocessing O(N^2 log^2 D / D^gamma), then
 O(D^q log D) per entry), since R_c(gamma) = ln 4/(c ln 10 - (c/2)H(1/c) - (c-1) ln 3 + gamma ln 4) = 1/(E + gamma).
-Exact count + pruned encodings: the same proof (the paper's Theorem `thm:singletech`) with the two replacements of Appendix A. The encoding term
+Exact count + pruned encoding: the same proof (the paper's Theorem `thm:singletech`) with the two replacements of
+Appendix A: (i) the geometric bound on the leaves of order >= t is replaced by the exact count
+sum_{d >= t} beta_d <= poly(m) C D^{-gamma} with this tier's gamma (C = K N0^2 outputs per tile; c and theta rational
+and m a multiple of their denominators, which changes D by a constant factor; this is why Theorem A takes c and
+theta rational); (ii) encodings are computed only for the leaves with at most m symbols P0, at cost
+N sqrt(K) N0 = N D^E with this tier's E instead of N 10^L/(sqrt(K) N0). The encoding term
 N D^E polylog is at most N^2 D^{-gamma}, because D^{E + gamma} <= N^{eps0 (E + gamma)} and eps0 (E + gamma) < 1
 leaves a polynomial margin that absorbs the polylog for large D (for bounded D the claim is trivial). The tile fits
 (N >= D^E) for the same reason. The entries need not be 0/1: `thm:singletech` takes integer entries of absolute value
@@ -96,7 +109,7 @@ n^{2 - sigma + o(1)}.
 *Proof.* log D / log N -> eps < eps0, so D <= N^{eps0} for large n. N^2 D^{-gamma} = n^{2 - eps gamma + o(1)},
 |W| D^q <= C N^2 D^{q - 1/2} = n^{2 - eps(1/2 - q) + o(1)}, and log^2 D = n^{o(1)}. ∎
 
-*Admissibility of the certified points.* `derand_cert.py` checks c > 10, 0 < theta < 0.9, eps > 0, the three terms
+*Admissibility of the certified points.* They are exact rationals, and `derand_cert.py` checks c > 10, 0 < theta < 0.9, eps > 0, the three terms
 eps gamma, eps(1/2 - q), 1 - eps E positive, 1 - eps E > eps gamma (so an eps0 strictly between eps and 1/(E + gamma)
 exists), and the cost side conditions 1 + eps < 2 - sigma and sigma < eps/2 used below.
 
@@ -132,10 +145,12 @@ trivial if min V_i + min V_j > max V_k or max V_i + max V_j < min V_k, and let R
 (ii) Order triples by (i,j,k) < (i',j',k') iff i < i', j < j', k > k' (the third coordinate reversed). If both are
 nontrivial, then 0 <= max V_i + max V_j - min V_k < min V_{i'} + min V_{j'} - max V_{k'} <= 0, using
 max V_i < min V_{i'}, max V_j < min V_{j'} and max V_{k'} < min V_k; a contradiction, so each chain of this order
-contains at most one nontrivial triple. The chains {(i, i + u, v - i) : i}, u in {-g..g}, v in {2..2g}, cover [g]^3
-((i,j,k) lies on the chain u = j - i, v = k + i), and there are (2g + 1)(2g - 1) <= (2g + 1)^2 of them. (FKP24 states
-the order with k increasing; its own chains decrease in k, and the step above needs the reversed order.) (iii) Sort; for each (i,j) the nontrivial k form a contiguous range
-(both conditions are monotone in k), found by binary search. ∎
+contains at most one nontrivial triple. The (2g - 1)^2 chains {(i, i + u, v - i) : i}, u in {1-g..g-1},
+v in {2..2g}, cover [g]^3 ((i,j,k) lies on the chain u = j - i, v = k + i, and i, j, k in [g] put u and v in these
+ranges; FKP24 states v in {-g..g}, which misses most triples), and they are chains for the order above. So
+|R| <= (2g - 1)^2 <= (2g + 1)^2. (FKP24 states the order with k increasing; its own chains decrease in k, and the
+step above needs the reversed order.) (iii) Sort; for each (i,j) the nontrivial k form a contiguous range (both
+conditions are monotone in k), found by binary search. ∎
 
 *Queries.* Q = {(a, i, j, k) : (i,j,k) in R, a in A_i}, |Q| <= (2g+1)^2 s <= 9 g^2 s. For a modulus m and
 q = (a,i,j,k) in Q let N_m(q) = #{(b, c) in B_j x C_k : m | a + b - c}.
@@ -179,15 +194,14 @@ N_{m_l}(q) >= 1 for every l and q lies in every S_l. If there is no solution, Le
 The sums over S_{l-1} cost O(|Q|) per solve. The primes of P are found by a sieve up to 2 n^delta = n^{o(1)}. All
 numbers are n^{O(1)} (counts at most n^2, sums at most n^5, moduli at most D_max <= n), so O(1) words each. ∎
 
-This proves Theorem A(a). The run is the same on yes- and no-instances, and no step uses randomness: the only choices
-are the minimisers p_j, which are computed.
+This proves Theorem A(a). The run is the same on yes- and no-instances (no early exit is needed), and no step uses
+randomness: the only choices are the minimisers p_j, which are computed.
 
 *Remarks.* (1) Why the AND survives: Lemma 2.5 bounds the counts only on the survivors S_{l-1}, so chain l works on
-what the earlier chains left, unlike FKP24's single modulus. A single deterministic modulus (FKP24 Lemma 3.2, the
-paper's Theorem 17) controls only a
-total over all queries, which is why those routes lose a constant fraction of sigma. (2) Prime-at-a-time is
-essential: choosing each m_l among all primes near sqrt(D_max) would cost n^{eps/2} solves per choice, about +0.028
-in the exponent with the exact count. (3) In a yes-instance the greedy choices may be poor; nothing depends on them there.
+what the earlier chains left. Unlike FKP24's single modulus (FKP24 Lemma 3.2, the paper's Theorem 17), which
+controls only a total over all queries, the chains keep the AND; those routes lose a constant fraction of sigma.
+(2) Prime-at-a-time is essential: choosing each m_l among all primes near sqrt(D_max) would cost n^{eps/2} solves per
+choice (+0.028 in the exponent with the exact count + pruned encoding tier).
 
 ## 3. Deterministic all-edges Exact Triangle
 
@@ -198,8 +212,10 @@ Input: parts A, B, C of n vertices, weights w in [-U, U], U = n^nu; S(a,b,c) = w
 
 **Lemma 3.1.** h(0) = 0, and 1 <= h(S) <= t for S != 0. Moreover t <= log2(3U) + 1 and P_t = O(log n).
 *Proof.* Every P_i divides 0. If S != 0 and every P_i divided S, then P_1 ··· P_t would divide S and exceed |S|. The
-product of the first t primes is at least 2^t. By Chebyshev's bound theta(x) = Theta(x), the primes up to
-O(log U) already have product above 3U, so P_t = O(log n); only P_t < n^delta is used. ∎
+product of the first t primes is at least 2^t, so t <= log2(3U) + 1. For P_t: by Chebyshev's bound
+theta(x) = sum_{p <= x} ln p >= x/2 for x >= x_0, the primes up to x0' = max(x_0, 2 ln(3U) + 1) have product above
+3U, so by minimality of t, P_t <= x0' = O(log U) = O(log n). (The bound P_t = O(t log t) from the prime number
+theorem would only give O(log n log log n).) Only P_t < n^delta is used below. ∎
 
 *Parameters.* delta, P, lambda as in Sec. 2 (Lemma 2.2 holds verbatim for k = S(a,b,c)). r = ceil(eps/(2 delta)).
 s = the largest integer with 2 s t lambda^r <= n^{delta r}. m_max = (2 n^delta)^r. D_max = s m_max P_t.
@@ -254,7 +270,9 @@ This contradicts S'_L = ∅ (Lemma 3.5). Finally (a,b) lies in a zero triangle i
 a slot in T. ∎
 
 **Lemma 3.7 (time).** n^{3 - sigma + o(1)}.
-*Proof.* L r |P| (t + 1) + L (t + 2) = n^{o(1)} families of Lemma 3.2, each n^{3 - sigma + o(1)}. Sums over the slots cost
+*Proof.* The greedy choices take L r |P| (t + 1) families (t + 1 per value of H, Lemma 3.3), and computing N_{m_l}
+and H_{m_l} on all slots takes t + 2 more per chain, so L r |P| (t + 1) + L (t + 2) = n^{o(1)} families of Lemma 3.2,
+each n^{3 - sigma + o(1)}. Sums over the slots cost
 O(|Q|) = O(n^3/s) = n^{3 - eps/2 + o(1)} per family, and sigma < eps/2 (checked). ∎
 
 This proves Theorem A(b), with no scans and no witness search. The plain count N_M cannot serve as the potential,
@@ -265,7 +283,8 @@ every instance, and the zero slots are recovered from N.
 
 Let T_AE(n, U) be the time of Theorem A(b) for weights in [-U, U]; for U = n^{O(1)} it is n^{3 - sigma + o(1)}.
 
-**Lemma 4.1 (comparisons as equalities; VW13 Theorem 3.3 style).** For integers v, t, tau >= 0, with
+**Lemma 4.1 (comparisons as equalities; VW13 Theorem 3.3 style; ImprovedExponents Lemma F, Lean
+`add_lt_iff_shiftDiff`).** For integers v, t, tau >= 0, with
 x_k = floor(x/2^k): v + t < tau iff v + t = tau - 1, or v_k + t_k in {tau_k - 2, tau_k - 3} for some
 k < bitlength(max(v,t,tau)).
 *Proof.* Soundness: v_k + t_k <= tau_k - 2 gives v + t <= (v_k + t_k + 2) 2^k - 2 <= tau_k 2^k - 2 <= tau - 2.
@@ -285,7 +304,8 @@ w(i,j) = j' - u_{k'}(i,j), and the k'-free instance has w(i,j) = 1 - u(i,j), w(i
 zero triangle of one of them iff v + t < u. The equivalence holds triple by triple, so (i,j) is positive iff it is
 positive in at least one of the 2K + 1 all-edges answers. ∎
 
-**Lemma 4.3 ((min,+) by simultaneous binary search; VW10, with the pairs oracle of Lemma 4.2).** For n x n integer
+**Lemma 4.3 ((min,+) by simultaneous binary search; VW10 full version, proof of Theorem 3.2, with the pairs oracle
+of Lemma 4.2 in place of its Lemma 3.2, which is where VW lose T(n^{1/3}) n^2).** For n x n integer
 matrices with entries in [-V, V], C = A * B (C(i,j) = min_k A(i,k) + B(k,j), in [-2V, 2V]) is computed with
 ceil(log2(4V + 1)) calls of Lemma 4.2 on the same n vertices, plus O(n^2 log V) time.
 *Proof.* Keep lo(i,j) <= C(i,j) <= hi(i,j), initially -2V and 2V. A round asks, with tau = floor((lo + hi)/2) + 1 (in
@@ -296,22 +316,36 @@ for the bound V' on finite entries; any sum using Lambda exceeds 2V', so results
 **Lemma 4.4 (APSP).** APSP on n vertices with weights in [-n^nu, n^nu] and no negative cycle takes ceil(log2 n)
 (min,+) squarings of the matrix with 0 on the diagonal, with finite entries bounded by n^{nu + 1} throughout
 (shortest walks of at most n - 1 edges are shortest paths when no cycle is negative); this is the paper's Theorem
-`thm:knownred`(b) setting.
+`thm:knownred`(b) setting (standard repeated squaring).
 
 *Total.* APSP is O(log n) (min,+) products, each O(log n) rounds of 2K + 1 = O(log n) all-edges ET calls on n vertices
 with weights n^{nu + O(1)}: O(log^3 n) T_AE(n, n^{nu + O(1)}) + n^{2 + o(1)} = n^{3 - sigma + o(1)}. The loss is
-polylogarithmic, so the exponent 3 - sigma is kept in full.
+polylogarithmic, so the exponent 3 - sigma is kept in full. This completes the chain APSP -> (min,+) -> all-pairs
+negative triangle (the search of VW10 Theorem 3.2) -> all-edges ET (Lemma 4.1); the same chain is Lean-checked in
+ImprovedExponents (`minPlus_allEdges`, `apsp_allEdges`).
 
 ## 5. Mechanical check (small instances; logic, not asymptotics)
 
 `check_derand.py` runs the three constructions as written (interval groups, the residue sets of Lemma 2.4 with the
 (x, y) decoding asserted, survivor-restricted greedy chains, the weight H through Lemma 3.3 with the identity asserted,
-Lemmas 4.1-4.3) against brute force, with chain primes in [20, 40) and r chosen so that the halving condition of
-Lemmas 2.5 and 3.5 holds literally: 3SUM on 300 instances (147 yes), all-edges ET on 120 instances (163 positive
+Lemmas 4.1-4.3) against brute force, in two runs.
+
+*Basic run*, chain primes in [20, 40): 3SUM on 300 instances (147 yes), all-edges ET on 120 instances (163 positive
 pairs, S'_L empty asserted every time), Lemma 4.1 exhaustively for v, t < 70, tau < 150, and the (min,+) product on
-150 instances, all with 0 mismatches. `check_derand_controls.py` gives two negative controls: Lemma 4.1 without the
-case v + t = tau - 1 fails (900 mismatches), and the plain count N as the all-edges potential leaves survivors in 33
-of 40 instances.
+150 instances, all with 0 mismatches. Here two chain primes already exceed 3U, so the modulus test is soon exact and
+the greedy choice is barely exercised.
+
+*Stress run*, which exercises it: chain primes in [20, 200), U = 10^5, every input a multiple of 667 = 23 · 29 (or
+667 · 31), so the smallest chain primes divide every k and the greedy minimum must avoid them; every chain modulus is
+asserted below 0.35 · 3U. It asserts the corrected chain cover of Lemma 2.3(ii), Lemma 2.5 on every chain
+(|S_l minus Z| <= |S_{l-1}|/4, Z the queries with a solution; this is the lemma itself on no-instances), Lemma 3.3 at
+every chosen modulus, Lemma 3.5 on every chain (|S'_l| <= |S'_{l-1}|/2), S'_L empty, and no zero-free slot in T
+(Lemma 3.6): 3SUM on 120 instances (78 yes) and all-edges ET on 60 instances (119 positive pairs), 0 mismatches.
+
+`check_derand_controls.py` gives three negative controls, each of which must fail: Lemma 4.1 without the case
+v + t = tau - 1 (900 mismatches); the plain count N as the all-edges potential, which leaves survivors in 33 of 40
+instances; and, on the stress instances, choosing each chain prime as the worst of the three smallest primes instead
+of the greedy minimum, which gives 373 halving violations and 30 wrong answers out of 120.
 
 ## Appendix A. The exact count and pruned encodings
 
@@ -356,7 +390,7 @@ accept it, and stop a pair's scans once its zero triangle is found.
 - *Cost.* L · 2 sqrt D · ceil(n/s) = O(n K log^2 n) instances, each n^{2 - sigma + o(1)}; building O(nD) each; reading
   and ANDing the L answers per slot n^3 polylog/sqrt D (below n^{3 - sigma} since sigma < eps/2); successful scans
   at most n^2 s. Total: expected n^{3 - sigma + o(1)} (`certify_levers.py`: O(n^{2.99601}) with the exact count +
-  pruned encodings), and APSP through Sec. 4 (Lemmas 4.2-4.4).
+  pruned encoding tier), and APSP through Sec. 4 (Lemmas 4.2-4.4).
 
 Credit: this is KPP16's amplification (an AND over independent hashes) applied to the paper's Theorem 17 instances,
 a known technique in a new setting. The Monte Carlo version of this exponent already follows from VX20 (Theorem 3.4

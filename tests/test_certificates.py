@@ -29,10 +29,12 @@ class Claims(unittest.TestCase):
 
     def test_derandomised_route(self):
         self.check("derand_cert.py",
-                   "exact count + pruned encodings: CERTIFIED  sigma >= 0.003999289713",
+                   "exact count + pruned encoding (after ImprovedExponents secs. 3-4): CERTIFIED  sigma >= 0.003999289713",
+                   "certified point (exact rationals): c = 2127327/100000, theta = 111731/1000000, eps = 5684608/100000000",
                    "deterministic 3SUM <= n^(1.996000711+o(1)) = O(n^1.996001)",
                    "deterministic all-edges Exact Triangle, (min,+), APSP <= n^(2.996000711+o(1)) = O(n^2.996001)",
-                   "paper lemmas only: CERTIFIED  sigma >= 0.003709895012",
+                   "paper lemmas: CERTIFIED  sigma >= 0.003709895012",
+                   "certified point (exact rationals): c = 2221832/100000, theta = 112064/1000000, eps = 5351255/100000000",
                    "deterministic 3SUM <= n^(1.996290105+o(1)) = O(n^1.996291)")
 
     def test_corollaries(self):
@@ -50,22 +52,37 @@ class Claims(unittest.TestCase):
                    "all-edges ET: instances 120, positive pairs 163 mismatches 0",
                    "Lemma 4.1 exhaustive v,t<70, tau<150 mismatches 0",
                    "(min,+) via all-edges ET: instances 150, mismatches 0")
+
+    def test_derand_stress(self):
+        # The stress run asserts the halving lemmas on every chain (Lemma 2.5: |S_l minus Z| <= |S_{l-1}|/4;
+        # Lemma 3.5: |S'_l| <= |S'_{l-1}|/2, S'_L empty, no zero-free slot in T). A violated assertion makes the
+        # script exit non-zero, which check() rejects; the source check guards against the asserts being removed.
+        self.check("check_derand.py",
+                   "stress 3SUM (primes in [20,200), U=1e5, inputs multiples of 667): instances 120, yes 78 mismatches 0",
+                   "stress all-edges ET: instances 60, positive pairs 119 mismatches 0")
+        src = (CERTS / "check_derand.py").read_text()
+        self.assertIn("assert viol == 0          # Lemma 2.5 on every chain", src)
+        self.assertIn("assert viol == 0 and zf == 0 and not Sp   # Lemma 3.5 on every chain, S'_L empty, Lemma 3.6", src)
+
+    def test_derand_controls_fail(self):
+        # Each control replaces one ingredient of the proof by a wrong one; the run must show the failure.
         self.check("check_derand_controls.py",
                    "control 4.1 without v+t=tau-1: 900 mismatches",
-                   "survivors nonempty in 33 of 40")
+                   "survivors nonempty in 33 of 40",
+                   "control bad primes (3SUM stress): 373 halving violations, 30 wrong answers of 120")
 
     def test_l1_route(self):
         self.check("certify_L1.py",
-                   "exact count + pruned encodings: CERTIFIED  S >= 0.003677999",
+                   "exact count + pruned encoding (after ImprovedExponents secs. 3-4): CERTIFIED  S >= 0.003677999",
                    "deterministic 3SUM <= n^(1.996322001+o(1)) = O(n^1.99633)",
                    "deterministic all-edges ET, (min,+), APSP <= n^(2.996322001+o(1)) = O(n^2.99633)",
-                   "paper lemmas only: CERTIFIED  S >= 0.003431999",
+                   "paper lemmas: CERTIFIED  S >= 0.003431999",
                    "deterministic 3SUM <= n^(1.996568001+o(1)) = O(n^1.99657)",
                    "deterministic all-edges ET, (min,+), APSP <= n^(2.996568001+o(1)) = O(n^2.99657)")
 
     def test_las_vegas_route(self):
         self.check("certify_levers.py",
-                   "route A, exact count + pruned encodings: CERTIFIED sigma(1/2) >= 0.003999291",
+                   "route A, exact count + pruned encoding (after ImprovedExponents secs. 3-4): CERTIFIED sigma(1/2) >= 0.003999291",
                    "<= n^(2.996000709+o(1)) = O(n^2.99601)",
                    "s_ET >= 0.002095234  APSP <= 2.997904766")
 

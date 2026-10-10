@@ -18,3 +18,11 @@ for it in range(40):
         Sp=[q for q in Sp if any(S3(*q,c)%m==0 for c in range(n))]
     fails+= len(Sp)>0
 print("control plain-N potential: survivors nonempty in",fails,"of 40 (zero slots never leave)")
+# control 3: bad primes. Same stress instances as check_derand.py, but each chain prime is the worst of the three
+# smallest primes in [20, 200), which divide every k. Halving must fail and no-instances must come out YES.
+srng = random.Random(23); viol_tot = wrong = 0
+for A, B, C, s in stress_3sum_instances(srng, 120):
+    got, viol = threesum_stress(A, B, C, s, worst_small_choice)
+    viol_tot += viol; wrong += got != brute3(A, B, C)
+assert viol_tot > 0 and wrong > 0
+print("control bad primes (3SUM stress):", viol_tot, "halving violations,", wrong, "wrong answers of 120 (both must be > 0)")

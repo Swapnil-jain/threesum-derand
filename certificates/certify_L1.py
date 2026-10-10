@@ -48,5 +48,5 @@ def cert(name, c, th, eps, de, boxes, enc):
 
 
 if __name__ == "__main__":
-    assert cert("exact count + pruned encodings", "20.276", "0.10457", "0.05961", "0.027966", "exact", "pruned")
-    assert cert("paper lemmas only", "21.178", "0.10488", "0.05620", "0.026384", "rho", "full")
+    assert cert("exact count + pruned encoding (after ImprovedExponents secs. 3-4)", "20.276", "0.10457", "0.05961", "0.027966", "exact", "pruned")
+    assert cert("paper lemmas", "21.178", "0.10488", "0.05620", "0.026384", "rho", "full")
