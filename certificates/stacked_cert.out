@@ -14,7 +14,7 @@ Corollaries at this point:
      k = 10: <= n^(9.987829+o(1)) = O(n^9.987829)
      k = 11: <= n^(10.987829+o(1)) = O(n^10.987829)
      k = 12: <= n^(11.983772+o(1)) = O(n^11.983772)
-   Convolution-3SUM through Exact Triangle on n^(1/2) vertices: 2 - sigma/2 <= 1.997972, worse than the direct reduction to 3SUM, 1.995790 (Theorem 3)
+   Convolution-3SUM through Exact Triangle on n^(1/2) vertices: 2 - sigma/2 <= 1.997972, worse than the direct reduction to 3SUM, 1.995782 (Theorem 3)
 folded, paper lemmas: CERTIFIED  sigma >= 0.003760515625
    certified point (exact rationals): c = 220136043/10000000, theta = 5613801/50000000, eps = 54758043/1000000000
    unfolded encoding term 1 - eps*E <= -0.009928 (negative: only the folded Lemma 3.2' applies)

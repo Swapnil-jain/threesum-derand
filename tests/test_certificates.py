@@ -64,7 +64,7 @@ class Claims(unittest.TestCase):
                          "k = 12: <= n^(11.983772+o(1)) = O(n^11.983772)",
                          "deterministic Zero/Min/Max-Weight k-Clique: O(n^(k - 0.003760 floor(k/3))) for every k >= 3",
                          "Convolution-3SUM through Exact Triangle on n^(1/2) vertices: 2 - sigma/2 <= 1.997972, worse than "
-                         "the direct reduction to 3SUM, 1.995790 (Theorem 3)")
+                         "the direct reduction to 3SUM, 1.995782 (Theorem 3)")
 
     def test_folded_mechanical(self):
         self.check("check_stacked.py",
