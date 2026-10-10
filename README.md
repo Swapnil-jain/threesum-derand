@@ -292,7 +292,7 @@ make lean         # the Lean 4 kernel checks (lean/README.md; elan with Lean v4.
 | `certificates/bands3_cert.py` | Theorem 3 with zone moves (Theorem C'): savings and exponents (three tiers), the layout cost, two controls that reduce to `bands_cert.py` (zone law 1), two controls that must fail, Convolution-3SUM and the ratios to Theorem C, version 1 and the paper |
 | `certificates/bands4_poly.py` | the exact Lemma Y and Rule Z segment polynomials for lengths 8 and 9, by two independent implementations (saved in `bands4_poly.json`) |
 | `certificates/bands4_cert.py` | Theorem 3 with Lemma Y and mixed segment lengths (Theorem C''): savings and exponents at both points, the diagonal fit, the no-sharing control (Theorem 1's saving), four controls that must fail, Convolution-3SUM and the ratios to Theorem C', version 1 and the paper |
-| `certificates/check_bands_y.py` | Lemma Y end to end on toy tiles with mixed segment lengths, with three controls that must fail (about 20 min; one case in about 2 min) |
+| `certificates/check_bands_y.py` | Lemma Y end to end on toy tiles with mixed segment lengths, with three controls that must fail (about 1 min of CPU, 15 s with the six cases in parallel; one case in about 2 s) |
 | `certificates/check_bands_rep.py`, `check_bands_carry.py`, `check_bands_stretch.py`, `check_bands_segments.py`, `check_bands_buckets.py` | Lemmas 2.1-2.2, 3.1-3.2, 3.3, 4.1 and Sec. 6 of `bands.md` against brute force or exact enumeration, each with negative controls |
 
 The new scripts keep their output in a `.out` file next to them. `tests/test_certificates.py`, `tests/test_bands.py`,
