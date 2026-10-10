@@ -17,7 +17,8 @@ Side conditions (proofs/bands.md, Sec. 5 and 7), each checked on the whole arb b
   q* < 1/2; q_fill < q_eff; sigma < eps/2; 1 + eps < 2 - sigma; eps (E + q(theta) - 1/2) + sigma < 1 (partial band
   rows); e_pre < 2 - sigma (the input-independent layout, e_pre = eps c (ln 9/lam + H(1/c))/ln 4).
 The points are fixed exact rationals (found by a float optimiser, which is not part of the certificate). Two controls
-must FAIL, and b = 1 (no sharing) must give back Theorem 1's saving. Printing uses directed rounding from the exact
+must FAIL, and b = 1 (no sharing) must give back Theorem 1's saving: it is compared with Theorem 1's formula at the
+same point, up to the rounding of z. Printing uses directed rounding from the exact
 arb endpoints: savings DOWN, exponents UP. Usage: python bands_cert.py
 """
 import sys as _sys
@@ -139,6 +140,20 @@ if __name__ == "__main__":
         sig[name] = s
     s_best = arb(sig[POINTS[0][0]].lower())                     # tier (C): its certified lower end
     s1 = theorem1_sigma()
+    # The b = 1 control is compared with Theorem 1's formula, so that it can fail. At b = 1 every run factor is
+    # (1 + y)^|G|, so A(lam, n; y, 1) = (1 + y)^n exactly and q_eff is Theorem 1's -theta ln z + ln(1 + 9z) at this z;
+    # Theorem 1 uses the optimal z, so its saving at the same (c, theta, eps) is at least ours and above it only by
+    # the rounding of z. Certifying the point alone (CERTIFIED above) did not compare anything.
+    _, c0, th0, eps0, z0, _, _ = POINTS[3]
+    y0 = 9 * Fr(z0)
+    exact_b1 = all(seg_average(LAM, k, y0, Fr(1)) == (1 + y0) ** k for k in range(LAM + 1))
+    C0, TH0, EPS0 = A(c0), A(th0), A(eps0)
+    s_thm1 = bmin(EPS0 * gamma(C0, TH0, "exact"), EPS0 * (A("1/2") - q(TH0)), 1 - EPS0 * E(C0, "pruned"))
+    gap = s_thm1 - sig[POINTS[3][0]]
+    b1_ok = exact_b1 and bool(gap > -A("1e-15")) and bool(gap < A("1e-10"))
+    print(f"control b = 1 against Theorem 1's formula at the same point: A(lam, n; y, 1) = (1 + y)^n exactly: {exact_b1};"
+          f" Theorem 1's saving there minus ours <= {up(gap, 15)} (must lie in [0, 1e-10]): {'OK' if b1_ok else 'WRONG'}")
+    verdicts.append(b1_ok)
     print("Comparisons, tier (C), ratios rounded DOWN (our lower bound over the other saving's upper end):")
     print(f"   over Theorem 1 (sigma <= {up(s1, 12)}): x{down(s_best / arb(s1.upper()), 4)}")
     print(f"   over the paper's deterministic 3SUM (eps'/2 = 0.000875): x{down(s_best / A('0.000875'), 3)}")

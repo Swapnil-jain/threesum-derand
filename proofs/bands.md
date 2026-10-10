@@ -56,7 +56,8 @@ of Theorem C on the whole arb ball at these exact rational points:
 | (C) shifted keys, stretch moves | b(len) (Lemmas 3.3, 3.4) | (1052341/50000, 1836/15625, 28717589/500000000, 94241/5000000) | 0.0042108435 | O(n^{1.995790}) |
 
 Nine-digit upper ends: 1.995856782, 1.995811603 and 1.995789157. Theorem A gives 1.996000711. With b = 1 (no sharing)
-the same formula gives 0.0039992877, Theorem A's saving, at a point that `bands_cert.py` also certifies (a control).
+the same formula gives 0.0039992877, Theorem A's saving, at a point that `bands_cert.py` also certifies (a control); the
+script compares it with Theorem A's formula at the same point, and they agree to within 5e-15 (the rounding of z).
 Tier (W) uses neither Lemma 3.3 nor Lemma 3.4 and is the simplest to check. Convolution-3SUM reduces to 3SUM in linear
 time, so it is solved deterministically in O(n^{1.995790}) as well.
 
@@ -393,7 +394,7 @@ sigma_0 is computed, so no step uses randomness. ∎
 | `check_bands_carry.py` | Lemmas 3.1 and 3.2, exhaustive over every key for n' <= 6 digits, with the 22/27 bound attained | 62/81 in place of 22/27; a fixed worst key above the average |
 | `check_bands_stretch.py` | Lemma 3.3: the values b(len), and the exact average of R_d over all (u, kappa) against the generating function, on seven shapes | the stretch count must differ from the adjacent one |
 | `check_bands_segments.py` | Lemma 4.1 as an exact equality, on four shapes | letting cross-segment gaps move |
-| `check_bands_buckets.py` | Sec. 6 against brute force on 160 instances (random, sparse, per-prime progressions that force heavy residues, clusters): answers, the solution partition of Lemma 6.1, light buckets, F(p) at most the mean, the shrink bound | dropping the second child misses solutions; the worst prime puts F(p) above the mean and stalls the recursion |
+| `check_bands_buckets.py` | Sec. 6 against brute force on 160 instances (random, sparse, per-prime progressions, clusters; the progressions are cut to n elements, so in 28 of the 40 progression instances some window prime has no heavy residue): answers, the solution partition of Lemma 6.1, light buckets, the shrink bound. "F(p) at most the mean" is also printed, but it holds for the minimising prime by definition, so it tests nothing | dropping the second child misses solutions; the worst prime puts F(p) above the mean and stalls the recursion |
 | `bands_cert.py` | Corollary D, every condition of Theorem C on the whole ball, b = 1 gives Theorem A's saving | eps 1% too large; z = 2 |
 | `bands3_cert.py` | Corollary D' (Sec. 9), every condition of Theorem C' on the whole ball; zone law 1 gives back Corollary D's (C) value and Theorem A's saving | eps 1% too large; z = 2 |
 | `tests/test_bands_zone.py` | Lemma Z by brute force over every leaf on toy grids (Sec. 9) | one class split across a wrapped diagonal |

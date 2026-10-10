@@ -7,8 +7,9 @@ X = #{(b, c) in B' x C' : b = c mod p}. Buckets are residues mod p; a bucket is 
 elements of B' or of C'. The light instance (A', B'_L, C'_L) is answered through the buckets alone (queries
 (a, j) with k = (a + j) mod p; this stands in for the chains and the oracle), and the children are (A', B'_H, C') and
 (A', B'_L, C'_H). Asserted: the answer and the set of solutions match brute force, each solution is found at exactly
-one node (Lemma 6.1), light buckets hold at most tau s elements, the chosen F(p) is at most the mean over the primes,
-and the shrink inequality of Lemma 6.2 holds.
+one node (Lemma 6.1), light buckets hold at most tau s elements, and the shrink inequality of Lemma 6.2 holds. The
+check "the chosen F(p) is at most the mean over the primes" is printed too, but the chosen prime is the minimiser, so it
+holds by definition; Lemma 6.2's bound on the mean itself is not tested here.
 Negative controls: (i) dropping the second child must miss solutions; (ii) the worst prime in place of the best one
 must put F(p) above the mean and stall the recursion (no progress, so no termination).
 Usage: python check_bands_buckets.py
@@ -74,7 +75,8 @@ def instance(kind, n, rnd):
     if kind == "sparse":     # more buckets (s = 1), larger U = g^2: many no-instances
         g = 3 * n; U = 20 * g * g
         return [rnd.randint(-U, U) for _ in range(3 * n)], g
-    if kind == "aps":        # B and C built from one AP per window prime: every prime sees a heavy bucket
+    if kind == "aps":        # B and C built from one AP per window prime. The lists are cut to n elements, so the
+                             # later primes' APs are dropped: in 28 of the 40 instances some prime has no heavy bucket.
         out = [rnd.randint(-U, U) for _ in range(n)]
         for part in range(2):
             vals = []

@@ -345,7 +345,10 @@ every chosen modulus, Lemma 3.5 on every chain (|S'_l| <= |S'_{l-1}|/2), S'_L em
 `check_derand_controls.py` gives three negative controls, each of which must fail: Lemma 4.1 without the case
 v + t = tau - 1 (900 mismatches); the plain count N as the all-edges potential, which leaves survivors in 33 of 40
 instances; and, on the stress instances, choosing each chain prime as the worst of the three smallest primes instead
-of the greedy minimum, which gives 373 halving violations and 30 wrong answers out of 120.
+of the greedy minimum, which gives 373 halving violations and 30 wrong answers out of 120. The second control is
+weaker than it looks: every pair that survives it has an exact zero (under N a zero slot never leaves), so it shows
+only that N never removes the positive pairs, not a failure of the halving. The third control runs on 3SUM only, at
+one size.
 
 ## Appendix A. The exact count and pruned encodings
 

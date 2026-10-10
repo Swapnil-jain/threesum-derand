@@ -50,6 +50,8 @@ class Claims(unittest.TestCase):
                          "(W) worst keys, adjacent moves: CERTIFIED  sigma >= 0.0041432182",
                          "deterministic 3SUM <= n^(1.995856782+o(1)) = O(n^1.995857)",
                          "control b = 1, no sharing (must give Theorem 1's saving): CERTIFIED  sigma >= 0.0039992877",
+                         "control b = 1 against Theorem 1's formula at the same point: A(lam, n; y, 1) = (1 + y)^n "
+                         "exactly: True; Theorem 1's saving there minus ours <= 0.000000000000005 (must lie in [0, 1e-10]): OK",
                          "layout precomputation: e9 <= 0.239494  eK <= 0.166660  e_pre <= 0.406153",
                          "over Theorem 1 (sigma <= 0.003999289714): x1.0528",
                          "over the paper's deterministic 3SUM (eps'/2 = 0.000875): x4.812",

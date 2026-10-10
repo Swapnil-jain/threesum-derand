@@ -305,6 +305,7 @@ certificates refuse to run under `python -O`, which would strip their `assert` s
 ## Further notes
 
 - [docs/CLOSED_IDEAS.md](docs/CLOSED_IDEAS.md): approaches we tried that do not improve the saving, each with its reason and model.
+- [CORRECTIONS.md](CORRECTIONS.md): dated corrections to the checks and their descriptions; none changes a result.
 
 ## Attribution
 

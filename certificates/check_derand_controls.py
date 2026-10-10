@@ -8,7 +8,8 @@ exec(src)
 # control 1: Lemma 4.1 without the k-free case must fail
 f=lambda v,t,tau: any((v>>k)+(t>>k) in ((tau>>k)-2,(tau>>k)-3) for k in range(max(v,t,tau).bit_length()))
 print("control 4.1 without v+t=tau-1:", sum(1 for v in range(30) for t in range(30) for tau in range(70) if f(v,t,tau)!=(v+t<tau)), "mismatches (must be > 0)")
-# control 2: plain count N as the all-edges potential: zero slots never leave, so S' need not empty
+# control 2: plain count N as the all-edges potential: zero slots never leave, so S' need not empty. Every survivor
+# here has an exact zero, so this shows only that N keeps the positive pairs; it does not exercise the halving.
 import random, math
 random.seed(3); n=3; U=30; fails=0
 for it in range(40):
