@@ -70,7 +70,7 @@ def corollaries(s, tier):
     print(f"   deterministic Zero/Min/Max-Weight k-Clique: O(n^(k - {float(s6):.6f} floor(k/3))) for every k >= 3")
     for k in range(3, 13):
         print(f"     k = {k:2d}: <= n^({up(k - (k // 3) * s, 6)}+o(1)) = O(n^{o_exp(k - (k // 3) * s, 6)})")
-    direct = "1.995790 (Theorem 3)" if tier == "exact" else "1.996291 (Theorem 1, paper lemmas)"
+    direct = "1.995782 (Theorem 3)" if tier == "exact" else "1.996291 (Theorem 1, paper lemmas)"
     print(f"   Convolution-3SUM through Exact Triangle on n^(1/2) vertices: 2 - sigma/2 <= {up(A(2) - s / 2, 6)}, "
           f"worse than the direct reduction to 3SUM, {direct}")
 
