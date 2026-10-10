@@ -1,5 +1,5 @@
 PYTHON ?= python3
-.PHONY: verify certificates
+.PHONY: verify certificates lean
 
 # Certificates and the tests on their printed values (python-flint, seconds on a laptop).
 verify:
@@ -11,3 +11,6 @@ certificates:
 		&& $(PYTHON) certify.py && $(PYTHON) check_negtri.py \
 		&& $(PYTHON) check_derand.py && $(PYTHON) check_derand_controls.py
 
+# The Lean 4 kernel checks (lean/README.md): needs elan (Lean v4.34.1) and the Mathlib cache; about 13 min on 3 cores.
+lean:
+	cd lean && lake exe cache get && lake build && lake env lean ThreesumLean/Axioms.lean

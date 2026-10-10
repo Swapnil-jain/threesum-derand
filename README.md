@@ -167,11 +167,11 @@ bind together (`certify_L1.py`).
 | All saving values | arb ball arithmetic (200 bits) at fixed rational points, every side condition checked on the whole ball (`certificates/`) |
 | Negative triangle to Exact Triangle (Appendix C) | Proof; exhaustive and end-to-end checks against brute force with a negative control (`check_negtri.py`) |
 | Theorem 1's constructions on small instances | Mechanical check against brute force, including a stress run that exercises the greedy choice and asserts the halving lemmas on every chain, with three negative controls that must fail (`check_derand.py`, `check_derand_controls.py`) |
-| Lean | **Pending.** A Lean 4 kernel check of the certificates is being built and is not included yet |
+| Lean (`lean/`) | Lean 4 kernel checks (Mathlib, standard axioms only, no `sorry` or `native_decide`) of the arithmetic of every certificate point in `derand_cert.py`, `certify_L1.py` and `certify.py`: each side condition, the saving and the 3SUM and APSP exponents (with the O(n^e) lines), at the exact rational point, with negative controls. Also the finite integer lemmas of Theorem 2 and Appendix C (bit-halving windows, Fredman's identity, the unique-witness test, the Alon-Naor bias, the negative-to-zero reduction). Not in Lean: the reductions and cost accounting, which are the paper proofs above, and `certify_levers.py` |
 | The paper's theorems | Assumed as published (its main theorems are Lean-formalised in anthropics/formal-math) |
 
-The mechanical checks test logic on small instances, not asymptotics. The arb certificates check arithmetic, not the
-reductions. Nothing here is formalised in Lean yet.
+The mechanical checks test logic on small instances, not asymptotics. The arb certificates and their Lean versions
+check arithmetic, not the reductions.
 
 ## 5. Reproduce
 
@@ -180,6 +180,7 @@ Requires Python 3.9 or newer and `python-flint` (`pip install -r requirements.tx
 ```sh
 make              # all certificates, the mechanical checks and the tests on their printed values (about 15 s)
 make certificates # the certificates and checks alone, printing every claim
+make lean         # the Lean 4 kernel checks (lean/README.md; elan with Lean v4.34.1, Mathlib cache; about 13 min on 3 cores)
 ```
 
 | script | prints |
