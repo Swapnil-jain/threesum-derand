@@ -8,6 +8,13 @@ plus about 35 minutes on 2 cores for `Bands2*.lean`, about 7 minutes for `Bands3
 Nothing here uses `native_decide` or `sorry`. `ThreesumLean/Axioms.lean` prints the axioms of the main theorems:
 only `propext`, `Classical.choice` and `Quot.sound`.
 
+Independent re-check: after `make lean`, the kernel replay checker bundled with the toolchain was run on each of the 20
+modules in `ThreesumLean/` (Bands2*, Bands3*, Bands4*, Stacked and KClique included), one module per run, from this
+directory: `lake env leanchecker <Module>`, e.g. `lake env leanchecker ThreesumLean.Bands4Points`. It replays every
+declaration the module adds through the Lean kernel, taking its imports (Mathlib included) as given. All 20 passed.
+`--fresh`, which re-checks Mathlib as well, was not run. Do not run `lake env leanchecker ThreesumLean`: the name is a
+prefix, so it checks every module at once and needs much more memory.
+
 These files check the arithmetic of the certificates and the integer lemmas. That each route really costs what its
 terms say is a paper proof (`proofs/`), not checked here.
 
