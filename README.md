@@ -22,8 +22,8 @@ their thin-product theorem with known reductions. In detail:
   all-edges weight H, whose zero test by small primes (Chinese remaindering) is folklore.
 - **ImprovedExponents** (github.com/qawbecrdtey/ImprovedExponents, 2026-10-07): the exact leaf count and the pruned
   encodings behind every figure labelled "exact count + pruned encoding (after ImprovedExponents secs. 3-4)",
-  including 1.996001. We found them
-  independently, but they were public first, with a Lean formalisation. With the paper's lemmas alone our bound is
+  including 1.996001. We found them independently, but they were public first, with a Lean
+  formalisation. With the paper's lemmas alone our bound is
   1.996291.
 - Kopelowitz, Pettie and Porat 2016 (KPP16): 3SUM to offline Set Disjointness and the AND over hashes.
 - Chan and Xu 2024 (CX24): the deterministic hash-free bit halving and Fredman reduction (route L1), and the
@@ -36,6 +36,11 @@ their thin-product theorem with known reductions. In detail:
 - Vassilevska Williams and Xu 2020 (VX20): the Monte Carlo Exact Triangle reduction behind the Las Vegas remark.
 - Björklund, Husfeldt, Kaski and Koivisto 2010 (BHKK10): trimmed Möbius inversion, the idea behind pruning the
   encodings.
+- Chan, Vassilevska Williams and Xu 2022 (CVX22): the randomised witness and predecessor steps that route L1 makes
+  deterministic.
+- Fredman 1976 (Fredman's trick), Matoušek 1991 (dominance products), Schönhage 1981 and Coppersmith 1982 (the
+  identity and its recursion, as used by the paper), Nešetřil and Poljak 1985 (k-Clique folding), and Bremner et al.
+  2014 (BCD14, (min,+)-convolution via (min,+) products).
 
 `NOTICE` has the full list and states exactly what is new.
 
@@ -79,7 +84,7 @@ survivor-restricted greedy chains and the weight H.
 The certified savings are sigma >= 0.003709895012 (paper lemmas) and sigma >= 0.003999289713 (exact count + pruned
 encoding (after ImprovedExponents secs. 3-4)), at exact rational points. The survivor-restricted greedy chains are new
 only in their criterion; the construction itself is known (Credits). The 3SUM algorithm is a decision algorithm; a
-solution costs O(log n) more decisions, and we claim no listing or All-Numbers version.
+solution costs O(log n) more decisions, and we claim no listing version.
 
 **Theorem 2 (hash-free route L1; `proofs/l1.md`).** Deterministic all-edges Exact Triangle, (min,+) product and APSP
 in O(n^2.99633), and 3SUM in O(n^1.99633) (S >= 0.003677999). With the paper's lemmas only: O(n^2.99657) and
@@ -120,9 +125,6 @@ Each applies a cited reduction to the theorems above; `certificates/derand_cert.
 | Zero-, Min- and Max-Weight k-Clique | n^{k - 0.0039992 floor(k/3)}, e.g. O(n^5.992002) for k = 6 | the paper's Nešetřil-Poljak folding to Exact Triangle on n^{floor(k/3)} vertices, on Theorem 1; Min/Max via VW13 as in the paper |
 | (min,+)-convolution | n^{1.998162 + o(1)} = O(n^1.99817) | Theorem 2 and BCD14 (sqrt n (min,+) products of sqrt n x sqrt n matrices) |
 
-Future work, unverified: deterministic 3XOR and All-Numbers 3SUM at the Theorem 1 exponent look reachable by the same
-chains. We have sketches only and claim nothing.
-
 ## 3. The method in one page
 
 **Where the paper loses.** Its Theorem 17 hashes all weights modulo one prime p ~ sqrt D and scans every pair that
@@ -149,7 +151,7 @@ vertices by parallel binary search and the dyadic negative-to-zero reduction (VW
 
 **Theorem 2: no hashing at all.** Chan and Xu's bit-halving recursion keeps, for every pair and block of d vertices,
 a pivot whose weight sum is known up to a constant window. At the next level the near-witnesses are counted exactly
-with Fredman's trick as comparison counts, which the paper's Matousek-style lemma turns into thin products. Witnesses
+with Fredman's trick as comparison counts, which the paper's Matoušek-style lemma turns into thin products. Witnesses
 are found deterministically by Alon and Naor's dilution with the counting oracle. Queries, same-block pairs and boxes
 bind together (`certify_L1.py`).
 
@@ -157,17 +159,16 @@ bind together (`certify_L1.py`).
 
 | item | status |
 |---|---|
-| Theorem 1 (`derandomisation.md`) | Full written proof. Two adversarial reviews: the first checked a sketch step by step; the second checked the full text, including the APSP chain, and found it correct (its qualifier, four textual fixes and stronger stress test are applied) |
-| Theorem 2, L1 (`l1.md`) | Full written proof; one adversarial review, after two fixes (3SUM window [-7, 8]; Alon-Naor bias 2^{-7c-1} for 3SUM) |
+| Theorem 1 (`derandomisation.md`) | Full written proof. Two internal adversarial reviews: the first checked a sketch step by step; the second checked the full text, including the APSP chain, and found it correct (its qualifier, four textual fixes and stronger stress test are applied) |
+| Theorem 2, L1 (`l1.md`) | Full written proof; one internal adversarial review, after two fixes (3SUM window [-7, 8]; Alon-Naor bias 2^{-7c-1} for 3SUM) |
 | Corollaries | Compositions of Theorems 1 and 2 with the cited reductions; not separately reviewed |
-| Remark, Las Vegas route (Appendix B) | Proof; one adversarial review |
+| Remark, Las Vegas route (Appendix B) | Proof; one internal adversarial review |
 | Exact count and pruned encodings (Appendix A) | Short arguments on the paper's construction; reviewed once; public earlier, Lean-checked, in ImprovedExponents |
 | All saving values | arb ball arithmetic (200 bits) at fixed rational points, every side condition checked on the whole ball (`certificates/`) |
 | Negative triangle to Exact Triangle (Appendix C) | Proof; exhaustive and end-to-end checks against brute force with a negative control (`check_negtri.py`) |
 | Theorem 1's constructions on small instances | Mechanical check against brute force, including a stress run that exercises the greedy choice and asserts the halving lemmas on every chain, with three negative controls that must fail (`check_derand.py`, `check_derand_controls.py`) |
 | Lean | **Pending.** A Lean 4 kernel check of the certificates is being built and is not included yet |
 | The paper's theorems | Assumed as published (its main theorems are Lean-formalised in anthropics/formal-math) |
-| 3XOR, All-Numbers 3SUM | Sketches only, unverified; not claimed |
 
 The mechanical checks test logic on small instances, not asymptotics. The arb certificates check arithmetic, not the
 reductions. Nothing here is formalised in Lean yet.
