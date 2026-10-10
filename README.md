@@ -194,6 +194,10 @@ make lean         # the Lean 4 kernel checks (lean/README.md; elan with Lean v4.
 
 `tests/test_certificates.py` runs each script once and checks its printed values against this README.
 
+## Further notes
+
+- [docs/CLOSED_IDEAS.md](docs/CLOSED_IDEAS.md): approaches we tried that do not improve the saving, each with its reason and model.
+
 ## Attribution
 
 Author: **Swapnil Jain**. Research, implementation and drafting were done with assistance from Claude (Anthropic).
