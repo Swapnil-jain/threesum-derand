@@ -4,6 +4,10 @@ This file lists approaches to faster 3SUM and APSP, built on the thin-product me
 Williams (arXiv 2610.06783, "AVW"), that we tried and found do not improve the saving. Each row has a stated reason.
 We list it so that other researchers and automated searches do not spend time on these routes again.
 
+**Contributing.** Please check this list before starting on a route, so effort is not duplicated. If you find a
+mistake in a closure, an idea that escapes a stated hypothesis, or a closed route of your own, open an issue or a
+pull request with the argument or certificate. New closures and corrections are welcome and will be credited.
+
 **Scope.** A closure holds only inside its stated model or hypotheses: the cost model of the thin product as AVW
 charge it, a stated class of identities, tests or reductions, or one route. Nothing here is a lower bound for 3SUM or
 APSP in general. The hypotheses of a closure show where an escape would have to break the model. An idea that
