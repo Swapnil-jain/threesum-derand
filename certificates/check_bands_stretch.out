@@ -1,0 +1,10 @@
+b(len): ['1', '62/81', '538/729', '4834/6561', '43498/59049', '391474/531441']
+L=6 mu=2 lam=6 Q=(3, 5) d=1: E R_d = 9856/729 predicted 9856/729 OK; adjacent-only 124/9 predicted 124/9 OK
+L=6 mu=2 lam=3 Q=(2, 4) d=1: E R_d = 1096/81 predicted 1096/81 OK; adjacent-only 124/9 predicted 124/9 OK
+L=6 mu=2 lam=6 Q=(4, 5) d=1: E R_d = 86996/6561 predicted 86996/6561 OK; adjacent-only 124/9 predicted 124/9 OK
+L=6 mu=2 lam=6 Q=(3, 5) d=2: E R_d = 299708/6561 predicted 299708/6561 OK; adjacent-only 3844/81 predicted 3844/81 OK
+L=7 mu=2 lam=7 Q=(4, 6) d=1: E R_d = 88696/6561 predicted 88696/6561 OK; adjacent-only 124/9 predicted 124/9 OK
+L=7 mu=2 lam=7 Q=(0, 5) d=2: E R_d = 43498/729 predicted 43498/729 OK; adjacent-only 62 predicted 62 OK
+L=6 mu=1 lam=6 Q=(5,) d=1: E R_d = 391474/59049 predicted 391474/59049 OK; adjacent-only 62/9 predicted 62/9 OK
+control (stretch moves change the count somewhere): True
+ALL OK

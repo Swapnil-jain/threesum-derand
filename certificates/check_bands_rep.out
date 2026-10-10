@@ -1,0 +1,74 @@
+Lemma 2.1: |Leaves_d(W)| <= sum_w R_d(w); Lemma 2.2: R_d(w) = [z^d] prod_G P_G(z) (adjacent moves)
+  L=6 mu=2 z0=1 K0=3 d=1 segments seed 0: |W|=267 leaves=4663 bound=4806 trivial=4806 gf=ok OK
+  L=6 mu=2 z0=1 K0=3 d=1 segments seed 1: |W|=245 leaves=4320 bound=4410 trivial=4410 gf=ok OK
+  L=6 mu=2 z0=1 K0=3 d=1 random   seed 0: |W|=329 leaves=5759 bound=5922 trivial=5922 gf=ok OK
+  L=6 mu=2 z0=1 K0=3 d=1 random   seed 1: |W|=215 leaves=3762 bound=3786 trivial=3870 gf=ok OK
+  L=6 mu=2 z0=1 K0=3 d=2 segments seed 0: |W|=267 leaves=20379 bound=21627 trivial=21627 gf=ok OK
+  L=6 mu=2 z0=1 K0=3 d=2 segments seed 1: |W|=245 leaves=18908 bound=19845 trivial=19845 gf=ok OK
+  L=6 mu=2 z0=1 K0=3 d=2 random   seed 0: |W|=329 leaves=24899 bound=26649 trivial=26649 gf=ok OK
+  L=6 mu=2 z0=1 K0=3 d=2 random   seed 1: |W|=215 leaves=16371 bound=16659 trivial=17415 gf=ok OK
+  L=7 mu=3 z0=1 K0=5 d=1 segments seed 0: |W|=464 leaves=11949 bound=12003 trivial=12528 gf=ok OK
+  L=7 mu=3 z0=1 K0=5 d=1 segments seed 1: |W|=383 leaves=9999 bound=10013 trivial=10341 gf=ok OK
+  L=7 mu=3 z0=1 K0=5 d=1 random   seed 0: |W|=396 leaves=10646 bound=10692 trivial=10692 gf=ok OK
+  L=7 mu=3 z0=1 K0=5 d=1 random   seed 1: |W|=312 leaves=8318 bound=8322 trivial=8424 gf=ok OK
+  L=7 mu=3 z0=1 K0=5 d=2 segments seed 0: |W|=464 leaves=102070 bound=105849 trivial=112752 gf=ok OK
+  L=7 mu=3 z0=1 K0=5 d=2 segments seed 1: |W|=383 leaves=86446 bound=88821 trivial=93069 gf=ok OK
+  L=7 mu=3 z0=1 K0=5 d=2 random   seed 0: |W|=396 leaves=94529 bound=96228 trivial=96228 gf=ok OK
+  L=7 mu=3 z0=1 K0=5 d=2 random   seed 1: |W|=312 leaves=72944 bound=74655 trivial=75816 gf=ok OK
+stretch moves (Lemma 3.3): leaves <= stretch bound <= adjacent bound
+  L=6 mu=2 K0=3 d=1 seed 0: leaves=4663 stretch bound=4806 adjacent bound=4806 OK
+  L=6 mu=2 K0=3 d=1 seed 1: leaves=4320 stretch bound=4410 adjacent bound=4410 OK
+  L=6 mu=2 K0=3 d=2 seed 0: leaves=20379 stretch bound=21627 adjacent bound=21627 OK
+  L=6 mu=2 K0=3 d=2 seed 1: leaves=18908 stretch bound=19845 adjacent bound=19845 OK
+  L=7 mu=3 K0=5 d=1 seed 0: leaves=11949 stretch bound=12001 adjacent bound=12003 OK
+  L=7 mu=3 K0=5 d=1 seed 1: leaves=9999 stretch bound=10013 adjacent bound=10013 OK
+  L=7 mu=3 K0=5 d=2 seed 0: leaves=102070 stretch bound=105813 adjacent bound=105849 OK
+  L=7 mu=3 K0=5 d=2 seed 1: leaves=86446 stretch bound=88821 adjacent bound=88821 OK
+segment grids whose whole classes sit on diagonals, so moves are used (bound < trivial asserted)
+  L=6 mu=2 z0=0 K0=3 seglen=3 d=1: |W|=974 leaves=16681 adjacent bound=17424 stretch bound=17061 trivial=17532 moves used=True OK
+  L=6 mu=2 z0=0 K0=3 seglen=3 d=2: |W|=974 leaves=70469 adjacent bound=78246 stretch bound=74979 trivial=78894 moves used=True OK
+  L=6 mu=3 z0=1 K0=4 seglen=3 d=1: |W|=210 leaves=5416 adjacent bound=5605 stretch bound=5581 trivial=5670 moves used=True OK
+  L=6 mu=3 z0=1 K0=4 seglen=3 d=2: |W|=210 leaves=45752 adjacent bound=49860 stretch bound=49644 trivial=51030 moves used=True OK
+  L=6 mu=3 z0=0 K0=4 seglen=3 d=1: |W|=634 leaves=15578 adjacent bound=16819 stretch bound=16817 trivial=17118 moves used=True OK
+  L=6 mu=3 z0=0 K0=4 seglen=3 d=2: |W|=634 leaves=120941 adjacent bound=148680 stretch bound=148671 trivial=154062 moves used=True OK
+  L=7 mu=3 z0=1 K0=5 seglen=3 d=1: |W|=676 leaves=17828 adjacent bound=18004 stretch bound=18004 trivial=18252 moves used=True OK
+  L=7 mu=3 z0=1 K0=5 seglen=3 d=2: |W|=676 leaves=154147 adjacent bound=160731 stretch bound=160731 trivial=164268 moves used=True OK
+negative controls on the move-exercising segment grids (each must violate in at least one run)
+  control drop_d L=6 mu=2 z0=0 seed 0: leaves=16681 bound=14432 violated
+  control drop_d L=6 mu=2 z0=0 seed 1: leaves=16907 bound=15562 violated
+  control drop_d L=6 mu=3 z0=1 seed 0: leaves=5416 bound=4965 violated
+  control drop_d L=6 mu=3 z0=1 seed 1: leaves=5132 bound=4802 violated
+  control drop_d L=6 mu=3 z0=0 seed 0: leaves=15578 bound=13861 violated
+  control drop_d L=6 mu=3 z0=0 seed 1: leaves=14441 bound=12387 violated
+  control drop_d L=7 mu=3 z0=1 seed 0: leaves=17828 bound=15777 violated
+  control drop_d L=7 mu=3 z0=1 seed 1: leaves=20223 bound=18073 violated
+  control drop_d on segment grids violated somewhere: True
+  control drop_e L=6 mu=2 z0=0 seed 0: leaves=16681 bound=17154 holds
+  control drop_e L=6 mu=2 z0=0 seed 1: leaves=16907 bound=13635 violated
+  control drop_e L=6 mu=3 z0=1 seed 0: leaves=5416 bound=5409 violated
+  control drop_e L=6 mu=3 z0=1 seed 1: leaves=5132 bound=5022 violated
+  control drop_e L=6 mu=3 z0=0 seed 0: leaves=15578 bound=15921 holds
+  control drop_e L=6 mu=3 z0=0 seed 1: leaves=14441 bound=14544 holds
+  control drop_e L=7 mu=3 z0=1 seed 0: leaves=17828 bound=17190 violated
+  control drop_e L=7 mu=3 z0=1 seed 1: leaves=20223 bound=19449 violated
+  control drop_e on segment grids violated somewhere: True
+negative controls on random grids (each must violate in at least one run)
+  control drop_d seed 0: leaves=10646 bound=9438 violated
+  control drop_d seed 1: leaves=8318 bound=7290 violated
+  control drop_d seed 2: leaves=12582 bound=11157 violated
+  control drop_d seed 3: leaves=7421 bound=6518 violated
+  control drop_d seed 4: leaves=16875 bound=15980 violated
+  control drop_d seed 5: leaves=7633 bound=6847 violated
+  control nonfibre seed 0: leaves=6469 bound=6458 violated
+  control nonfibre seed 1: leaves=6471 bound=6435 violated
+  control nonfibre seed 2: leaves=6467 bound=6468 holds
+  control nonfibre seed 3: leaves=6466 bound=6469 holds
+  control nonfibre seed 4: leaves=6466 bound=6404 violated
+  control nonfibre seed 5: leaves=6466 bound=6456 violated
+  control drop_e seed 0: leaves=10646 bound=10692 holds
+  control drop_e seed 1: leaves=8318 bound=8028 violated
+  control drop_e seed 2: leaves=12582 bound=12357 violated
+  control drop_e seed 3: leaves=7421 bound=7479 holds
+  control drop_e seed 4: leaves=16875 bound=16371 violated
+  control drop_e seed 5: leaves=7633 bound=7668 holds
+ALL OK

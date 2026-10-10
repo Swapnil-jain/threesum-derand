@@ -1,0 +1,20 @@
+n=1 S=[0]: max_kappa E = 2.76543 <= worst bound 2.76543 (kappa=1..1: 2.76543); avg over kappa 2.65844 == typical 2.65844: True
+n=1 S=[0]: max_kappa E = 5.4 <= worst bound 5.4 (kappa=1..1: 5.4); avg over kappa 5.13333 == typical 5.13333: True
+n=1 S=[0]: max_kappa E = 16.4815 <= worst bound 16.4815 (kappa=1..1: 16.4815); avg over kappa 15.5432 == typical 15.5432: True
+n=2 S=[0]: max_kappa E = 1.61111 <= worst bound 1.61111 (kappa=1..1: 1.61111); avg over kappa 1.57407 == typical 1.57407: True
+n=2 S=[0, 1]: max_kappa E = 18.4733 <= worst bound 18.4733 (kappa=1..1: 18.4733); avg over kappa 17.0968 == typical 17.0968: True
+n=2 S=[0]: max_kappa E = 3.85185 <= worst bound 3.85185 (kappa=1..1: 3.85185); avg over kappa 3.67901 == typical 3.67901: True
+n=3 S=[0, 1, 2]: max_kappa E = 54.875 <= worst bound 54.875 (kappa=1..1: 54.875); avg over kappa 48.1183 == typical 48.1183: True
+n=3 S=[0, 2]: max_kappa E = 19.0682 <= worst bound 19.0682 (kappa=1..1: 19.0682); avg over kappa 17.3576 == typical 17.3576: True
+n=3 S=[0, 1, 2]: max_kappa E = 55.2727 <= worst bound 55.2727 (kappa=1..1: 55.2727); avg over kappa 48.9923 == typical 48.9923: True
+n=4 S=[1]: max_kappa E = 3.17284 <= worst bound 3.17284 (kappa=1..1: 3.17284); avg over kappa 3.04115 == typical 3.04115: True
+n=4 S=[0, 1, 2, 3]: max_kappa E = 1626.27 <= worst bound 1626.27 (kappa=1..1: 1626.27); avg over kappa 1323.57 == typical 1323.57: True
+n=4 S=[1, 2, 3]: max_kappa E = 40.4238 <= worst bound 40.4238 (kappa=1..1: 40.4238); avg over kappa 35.4813 == typical 35.4813: True
+n=5 S=[1, 2]: max_kappa E = 88.2305 <= worst bound 88.2305 (kappa=1..1: 88.2305); avg over kappa 78.9749 == typical 78.9749: True
+n=5 S=[4]: max_kappa E = 3.21164 <= worst bound 3.21164 (kappa=1..1: 3.21164); avg over kappa 3.0776 == typical 3.0776: True
+n=5 S=[2, 3, 4]: max_kappa E = 30.6449 <= worst bound 30.6449 (kappa=1..1: 30.6449); avg over kappa 27.3724 == typical 27.3724: True
+n=6 S=[2]: max_kappa E = 3.17284 <= worst bound 3.17284 (kappa=1..1: 3.17284); avg over kappa 3.04115 == typical 3.04115: True
+n=6 S=[0, 1, 2, 3, 4, 5]: max_kappa E = 5510.81 <= worst bound 5510.81 (kappa=1..1: 5510.81); avg over kappa 4226.98 == typical 4226.98: True
+n=6 S=[1]: max_kappa E = 7.79012 <= worst bound 7.79012 (kappa=1..1: 7.79012); avg over kappa 7.3786 == typical 7.3786: True
+control (W with 62/81) fails somewhere: True ; control (fixed worst kappa above average): True
+ALL OK

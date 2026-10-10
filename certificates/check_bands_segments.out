@@ -1,0 +1,6 @@
+L=8 lam=4 mu=3: 4 classes, equality holds
+L=12 lam=4 mu=4: 15 classes, equality holds
+L=12 lam=3 mu=5: 40 classes, equality holds
+L=10 lam=5 mu=4: 5 classes, equality holds
+control differs somewhere: True
+ALL OK

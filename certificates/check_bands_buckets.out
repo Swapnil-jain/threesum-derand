@@ -1,0 +1,5 @@
+instances 160, yes 124, nodes 375, max depth 2
+answers and solution partition: OK; light buckets <= tau s: True; chosen F(p) <= mean: True; shrink inequality: True
+control (drop child 2): 12 instances with missed or wrong solution sets (must be > 0)
+control (ii) worst prime: nodes 302, chosen F(p) above the mean at 292 nodes, no-progress nodes (recursion would not terminate) 98 (both must be > 0); mean-based shrink bound broken at 0 nodes (informational: at these sizes the mean exceeds tau s, so that bound is vacuous); answers still correct: True
+ALL OK

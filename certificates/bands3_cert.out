@@ -1,0 +1,50 @@
+(C) shifted keys, stretch moves, zone moves: CERTIFIED  sigma >= 0.0042143770
+   certified point (exact rationals): c = 10514903/500000, theta = 58807/500000, eps = 574807987/10000000000, z = 23671/1250000, lam = 8, b = stretch, zone b = 8/9
+   q_eff <= 0.426681985  q_fill <= 0.400780661  gamma >= 0.073317997  E <= 17.323796
+   layout precomputation: e9 <= 0.239490  eK <= 0.166758  e_pre <= 0.406248
+   deterministic 3SUM <= n^(1.995785623+o(1)) = O(n^1.995786)
+(S) shifted keys, adjacent moves, zone moves: CERTIFIED  sigma >= 0.0041917719
+   certified point (exact rationals): c = 5262491/250000, theta = 58501/500000, eps = 574279737/10000000000, z = 91849/5000000, lam = 8, b = 62/81, zone b = 8/9
+   q_eff <= 0.427007536  q_fill <= 0.398655211  gamma >= 0.072991812  E <= 17.340125
+   layout precomputation: e9 <= 0.239500  eK <= 0.166645  e_pre <= 0.406145
+   deterministic 3SUM <= n^(1.995808229+o(1)) = O(n^1.995809)
+(W) worst keys, adjacent moves, zone moves: CERTIFIED  sigma >= 0.0041463659
+   certified point (exact rationals): c = 5274867/250000, theta = 57881/500000, eps = 572980907/10000000000, z = 172629/10000000, lam = 8, b = 22/27, zone b = 8/9
+   q_eff <= 0.427634005  q_fill <= 0.394227839  gamma >= 0.072364818  E <= 17.380224
+   layout precomputation: e9 <= 0.239520  eK <= 0.166368  e_pre <= 0.405887
+   deterministic 3SUM <= n^(1.995853635+o(1)) = O(n^1.995854)
+control zone law 1 at Corollary D's (C) point (must give 0.0042108435): CERTIFIED  sigma >= 0.0042108435
+   certified point (exact rationals): c = 1052341/50000, theta = 1836/15625, eps = 28717589/500000000, z = 94241/5000000, lam = 8, b = stretch, zone b = 1
+   q_eff <= 0.426685288  q_fill <= 0.400223110  gamma >= 0.073315889  E <= 17.337578
+   layout precomputation: e9 <= 0.239494  eK <= 0.166660  e_pre <= 0.406153
+   deterministic 3SUM <= n^(1.995789157+o(1)) = O(n^1.995790)
+control b = 1, zone law 1 (must give Theorem 1's saving): CERTIFIED  sigma >= 0.0039992877
+   certified point (exact rationals): c = 1063663/50000, theta = 111731/1000000, eps = 14211513/250000000, z = 139761/10000000, lam = 8, b = 1, zone b = 1
+   q_eff <= 0.429647045  q_fill <= 0.379599906  gamma >= 0.070352981  E <= 17.520982
+   layout precomputation: e9 <= 0.239588  eK <= 0.165400  e_pre <= 0.404987
+   deterministic 3SUM <= n^(1.996000713+o(1)) = O(n^1.996001)
+control eps 1% too large (must FAIL): FAILED  sigma >= -0.0057433609
+   certified point (exact rationals): c = 10514903/500000, theta = 58807/500000, eps = 145139/2500000, z = 23671/1250000, lam = 8, b = stretch, zone b = 8/9
+   failed: terms > 0
+   failed: eps(E+gamma) < 1
+   q_eff <= 0.426681985  q_fill <= 0.400780661  gamma >= 0.073317997  E <= 17.323796
+   layout precomputation: e9 <= 0.241885  eK <= 0.168426  e_pre <= 0.410310
+   deterministic 3SUM <= n^(2.005743361+o(1)) = O(n^2.005744)
+   (negative control: it must FAIL) OK
+control z = 2 (must FAIL): FAILED  sigma >= -0.0806497631
+   certified point (exact rationals): c = 10514903/500000, theta = 58807/500000, eps = 574807987/10000000000, z = 2, lam = 8, b = stretch, zone b = 8/9
+   failed: 0<z<=1
+   failed: terms > 0
+   failed: q* < 1/2
+   q_eff <= 1.903073111  q_fill <= 0.400780661  gamma >= 0.073317997  E <= 17.323796
+   layout precomputation: e9 <= 0.239490  eK <= 0.166758  e_pre <= 0.406248
+   deterministic 3SUM <= n^(2.080649764+o(1)) = O(n^2.080650)
+   (negative control: it must FAIL) OK
+control zone law 1 at Corollary D's (C) point (must give 0.0042108435): sigma >= 0.0042108435, bands_cert.py prints 0.0042108435: OK
+control b = 1, zone law 1 (must give Theorem 1's saving): sigma >= 0.0039992877, bands_cert.py prints 0.0039992877: OK
+Comparisons, tier (C), ratios rounded DOWN (our lower bound over the other saving's upper end):
+   over Theorem C (sigma <= 0.004210843583): x1.00083
+   over Theorem 1 (sigma <= 0.003999289714): x1.0537
+   over the paper's deterministic 3SUM (eps'/2 = 0.000875): x4.816
+   deterministic Convolution-3SUM (linear-time reduction to 3SUM) <= n^(1.995785623+o(1)) = O(n^1.995786)
+ALL OK

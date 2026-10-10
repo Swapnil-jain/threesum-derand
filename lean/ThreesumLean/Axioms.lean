@@ -1,6 +1,8 @@
 import ThreesumLean.Points
 import ThreesumLean.Finite
 import ThreesumLean.KClique
+import ThreesumLean.Bands2
+import ThreesumLean.Bands3
 
 /-! Every checked theorem depends only on Lean's standard axioms (no `sorryAx`, no `native_decide`). -/
 
@@ -26,3 +28,35 @@ import ThreesumLean.KClique
 #print axioms TS.kclique_T4_table
 #print axioms TS.kclique_T1_uniform
 #print axioms TS.conv3sum_via_ET_T4
+#print axioms TS.bands2_W_full
+#print axioms TS.bands2_S_full
+#print axioms TS.bands2_C_full
+#print axioms TS.bands2_C_fails_next_s0
+#print axioms TS.bands2_C_fails_perturbed_eps
+#print axioms TS.worstAvg_not_62_81
+#print axioms TS.bS_five_ne_four
+#print axioms TS.bands2_W_fails_next_s0
+#print axioms TS.bands2_W_fails_next_b
+#print axioms TS.bands2_W_fails_next_o
+#print axioms TS.bands2_W_fails_perturbed_eps
+#print axioms TS.bands2_S_fails_next_s0
+#print axioms TS.bands2_S_fails_next_b
+#print axioms TS.bands2_S_fails_next_o
+#print axioms TS.bands2_S_fails_perturbed_eps
+#print axioms TS.bands2_C_fails_next_b
+#print axioms TS.bands2_C_fails_next_o
+#print axioms TS.bands3_W_full
+#print axioms TS.bands3_S_full
+#print axioms TS.bands3_C_full
+#print axioms TS.bands3_W_fails_next_s0
+#print axioms TS.bands3_W_fails_next_b
+#print axioms TS.bands3_W_fails_next_o
+#print axioms TS.bands3_W_fails_perturbed_eps
+#print axioms TS.bands3_S_fails_next_s0
+#print axioms TS.bands3_S_fails_next_b
+#print axioms TS.bands3_S_fails_next_o
+#print axioms TS.bands3_S_fails_perturbed_eps
+#print axioms TS.bands3_C_fails_next_s0
+#print axioms TS.bands3_C_fails_next_b
+#print axioms TS.bands3_C_fails_next_o
+#print axioms TS.bands3_C_fails_perturbed_eps

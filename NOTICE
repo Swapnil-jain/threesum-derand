@@ -5,12 +5,15 @@ This work builds on, and does not modify, the following:
 
 - Josh Alman and Virginia Vassilevska Williams, arXiv 2610.06783 (v1, October 2026): the thin-product theorem, the
   reductions to it, and every lemma used here (Theorem 17, Theorem thm:singletech, Corollary cor:tradeoff, Lemmas
-  lem:realred and lem:cmp, the k-Clique folding), and the conclusion footnote that names the two routes made
+  lem:realred and lem:cmp, the k-Clique folding, and the pruned recursion with its leaf count, lem:prune and
+  lem:count, whose union of leaves Theorem 3 bounds), and the conclusion footnote that names the two routes made
   deterministic here. Their main theorems are Lean-formalised by Anthropic (anthropics/formal-math, 3sum-apsp).
 - qawbecrdtey, github.com/qawbecrdtey/ImprovedExponents (published 2026-10-07, Lean): the exact leaf count and the
   pruned encodings (its Sections 3 and 4), used in every figure labelled "exact count + pruned encoding (after
-  ImprovedExponents secs. 3-4)", and a Lean-checked (min,+) to all-edges Exact Triangle chain. We found the same
-  re-tune improvements independently, but theirs came first.
+  ImprovedExponents secs. 3-4)", and a Lean-checked (min,+) to all-edges Exact Triangle chain. We found the same re-tune
+  improvements independently, but theirs came first. Its notes on limits also show that a random wanted set gives no
+  saving over the worst-case leaf count and name structured (Hankel or anti-diagonal) wanted sets as an open lead;
+  Theorem 3 pursues that lead, and the idea is theirs.
 - Timothy M. Chan and Moshe Lewenstein, STOC 2015 (arXiv 1502.05204): the deterministic pseudo-perfect
   pseudo-additive family, built from small primes chosen one at a time by averaging over the survivors. Our chains
   follow this construction. Earlier: Jeanette P. Schmidt and Alan Siegel, SIAM J. Comput. 1990, and Noga Alon and
@@ -32,6 +35,10 @@ This work builds on, and does not modify, the following:
   reductions used by route L1.
 - Andreas Björklund, Thore Husfeldt, Petteri Kaski and Mikko Koivisto, 2010: trimmed Möbius inversion, the
   trimmed-transform idea behind pruned encodings.
+- Michael L. Fredman, János Komlós and Endre Szemerédi, JACM 1984: choosing a hash prime deterministically by
+  counting collisions (Theorem 3's residue buckets). The method of conditional expectations (Paul Erdős and John
+  Selfridge 1973; Joel Spencer 1987; Prabhakar Raghavan 1988) for Theorem 3's shift, and Wassily Hoeffding 1963 for
+  its typical signatures.
 - Cited reductions for the corollaries: the Nešetřil-Poljak k-Clique folding (1985) as used in the paper, and
   Bremner et al. (BCD14) for (min,+)-convolution to (min,+) products.
 
@@ -43,6 +50,11 @@ What is new here:
 - The L1 composition (Theorem 2): Chan-Xu halving with the paper's counting oracle and Alon-Naor witnesses, with the
   3SUM window and the Alon-Naor bias repaired.
 - The Las Vegas random-prime Exact Triangle variant (a remark; KPP16's amplification on the paper's instances).
+- The folded residue instances (Theorem 1', proofs/stacked.md): the M residue instances of one Exact Triangle piece
+  stacked into one square product, with the condition eps (E + gamma - 1/4) < 1; and its k-Clique values.
+- The shared-leaf bound for the pruned recursion (Theorem 3, proofs/bands.md): the canonical-representative lemma and
+  its generating function, the blocking laws of integer keys and the choice of the shift, the layout by segment
+  signatures, and the deterministic residue buckets with heavy-bucket recursion.
 - The negative-to-zero triangle reduction written with the shift tau = 2h - w_ab, which fixes an off-by-one in our
   earlier version, and checked end to end.
 - The arb certificates, the mechanical checks and the parameter points.

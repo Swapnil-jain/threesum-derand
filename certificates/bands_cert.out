@@ -1,0 +1,42 @@
+(C) shifted keys, stretch moves: CERTIFIED  sigma >= 0.0042108435
+   certified point (exact rationals): c = 1052341/50000, theta = 1836/15625, eps = 28717589/500000000, z = 94241/5000000, lam = 8, b = stretch
+   q_eff <= 0.426685288  q_fill <= 0.400223110  gamma >= 0.073315889  E <= 17.337578
+   layout precomputation: e9 <= 0.239494  eK <= 0.166660  e_pre <= 0.406153
+   deterministic 3SUM <= n^(1.995789157+o(1)) = O(n^1.995790)
+(S) shifted keys, adjacent moves: CERTIFIED  sigma >= 0.0041883974
+   certified point (exact rationals): c = 65833/3125, theta = 23379/200000, eps = 28691779/500000000, z = 36571/2000000, lam = 8, b = 62/81
+   q_eff <= 0.427008783  q_fill <= 0.398111955  gamma >= 0.072989504  E <= 17.353568
+   layout precomputation: e9 <= 0.239503  eK <= 0.166550  e_pre <= 0.406053
+   deterministic 3SUM <= n^(1.995811603+o(1)) = O(n^1.995812)
+(W) worst keys, adjacent moves: CERTIFIED  sigma >= 0.0041432182
+   certified point (exact rationals): c = 2111519/100000, theta = 115663/1000000, eps = 28628097/500000000, z = 17187/1000000, lam = 8, b = 22/27
+   q_eff <= 0.427637205  q_fill <= 0.393719874  gamma >= 0.072363298  E <= 17.392959
+   layout precomputation: e9 <= 0.239523  eK <= 0.166278  e_pre <= 0.405800
+   deterministic 3SUM <= n^(1.995856782+o(1)) = O(n^1.995857)
+control b = 1, no sharing (must give Theorem 1's saving): CERTIFIED  sigma >= 0.0039992877
+   certified point (exact rationals): c = 1063663/50000, theta = 111731/1000000, eps = 14211513/250000000, z = 139761/10000000, lam = 8, b = 1
+   q_eff <= 0.429647045  q_fill <= 0.379599906  gamma >= 0.070352981  E <= 17.520982
+   layout precomputation: e9 <= 0.239588  eK <= 0.165400  e_pre <= 0.404987
+   deterministic 3SUM <= n^(1.996000713+o(1)) = O(n^1.996001)
+control eps 1% too large (must FAIL): FAILED  sigma >= -0.0057447440
+   certified point (exact rationals): c = 1052341/50000, theta = 1836/15625, eps = 2900476489/50000000000, z = 94241/5000000, lam = 8, b = stretch
+   failed: terms > 0
+   failed: eps(E+gamma) < 1
+   q_eff <= 0.426685288  q_fill <= 0.400223110  gamma >= 0.073315889  E <= 17.337578
+   layout precomputation: e9 <= 0.241889  eK <= 0.168327  e_pre <= 0.410215
+   deterministic 3SUM <= n^(2.005744744+o(1)) = O(n^2.005745)
+   (negative control: it must FAIL) OK
+control z = 2 (must FAIL): FAILED  sigma >= -0.0807084832
+   certified point (exact rationals): c = 1052341/50000, theta = 1836/15625, eps = 28717589/500000000, z = 2, lam = 8, b = stretch
+   failed: 0<z<=1
+   failed: terms > 0
+   failed: q* < 1/2
+   q_eff <= 1.905209943  q_fill <= 0.400223110  gamma >= 0.073315889  E <= 17.337578
+   layout precomputation: e9 <= 0.239494  eK <= 0.166660  e_pre <= 0.406153
+   deterministic 3SUM <= n^(2.080708484+o(1)) = O(n^2.080709)
+   (negative control: it must FAIL) OK
+Comparisons, tier (C), ratios rounded DOWN (our lower bound over the other saving's upper end):
+   over Theorem 1 (sigma <= 0.003999289714): x1.0528
+   over the paper's deterministic 3SUM (eps'/2 = 0.000875): x4.812
+   deterministic Convolution-3SUM (linear-time reduction to 3SUM) <= n^(1.995789157+o(1)) = O(n^1.995790)
+ALL OK

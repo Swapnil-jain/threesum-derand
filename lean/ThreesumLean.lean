@@ -4,4 +4,6 @@ import ThreesumLean.Points
 import ThreesumLean.Finite
 import ThreesumLean.Stacked
 import ThreesumLean.KClique
+import ThreesumLean.Bands2
+import ThreesumLean.Bands3
 import ThreesumLean.Axioms

@@ -1,4 +1,4 @@
-# Deterministic 3SUM in O(n^1.996001)
+# Deterministic 3SUM in O(n^1.995786)
 
 **Swapnil Jain. A short paper with its artefacts.**
 
@@ -6,6 +6,13 @@ Alman and Vassilevska Williams (arXiv 2610.06783; below "the paper", AVW) gave t
 truly subcubic APSP algorithms. Their deterministic bounds are O(n^1.9992) for 3SUM and O(n^2.99942) for APSP. Their
 conclusion notes that two routes would keep more of their saving: KPP16's reduction for 3SUM, which is randomised,
 and the all-edges version of Exact Triangle for APSP. We make both deterministic, and they keep the whole saving.
+
+**Version 2** adds three results: deterministic 3SUM in O(n^1.995786), by bounding the leaves that the wanted entries
+share in the paper's pruned recursion (Theorem 3); deterministic all-edges Exact Triangle, (min,+) and APSP in
+O(n^2.995943), by folding the residue instances of one Exact Triangle piece into one square product (Theorem 1');
+and, from the latter, deterministic Zero-, Min- and Max-Weight k-Clique in O(n^{k - 0.004057 floor(k/3)}). The 3SUM
+saving grows by 5.3% over version 1 (from 0.0039993 to 0.0042143, both rounded against us) and is 4.8 times the
+paper's 0.000875.
 
 **Working on this problem?** Read [docs/CLOSED_IDEAS.md](docs/CLOSED_IDEAS.md) first: it lists the routes we tried
 that do not improve the saving, with the reason for each, so effort is not duplicated. Contributions are welcome.
@@ -28,6 +35,13 @@ their thin-product theorem with known reductions. In detail:
   including 1.996001. We found them independently, but they were public first, with a Lean
   formalisation. With the paper's lemmas alone our bound is
   1.996291.
+- **ImprovedExponents** also showed that a random wanted set gives no saving over the worst-case leaf count, and named
+  structured (Hankel or anti-diagonal) wanted sets as an open lead. Theorem 3 follows that lead; the suggestion to
+  look for a gain in the structure of the wanted set is theirs. The pruned recursion whose leaves Theorem 3 counts,
+  and the count it tightens, are the paper's. **Ours (Theorem 3):** the canonical-representative bound on shared
+  leaves, the blocking laws of integer keys and the choice of the shift, the layout by segment signatures, the zone
+  moves of Rule Z, and the deterministic residue buckets. **Ours (Theorem 1'):** folding the residue instances of an
+  Exact Triangle piece into one square product.
 - Kopelowitz, Pettie and Porat 2016 (KPP16): 3SUM to offline Set Disjointness and the AND over hashes.
 - Chan and Xu 2024 (CX24): the deterministic hash-free bit halving and Fredman reduction (route L1), and the
   random-prime false-positive bound.
@@ -41,6 +55,9 @@ their thin-product theorem with known reductions. In detail:
   encodings.
 - Chan, Vassilevska Williams and Xu 2022 (CVX22): the randomised witness and predecessor steps that route L1 makes
   deterministic.
+- Fredman, Komlós and Szemerédi 1984 (choosing a hash prime by counting collisions; Theorem 3's buckets), the method
+  of conditional expectations (Erdős and Selfridge 1973, Spencer 1987, Raghavan 1988; Theorem 3's shift), and
+  Hoeffding 1963 (Theorem 3's typical signatures).
 - Fredman 1976 (Fredman's trick), Matoušek 1991 (dominance products), Schönhage 1981 and Coppersmith 1982 (the
   identity and its recursion, as used by the paper), Nešetřil and Poljak 1985 (k-Clique folding), and Bremner et al.
   2014 (BCD14, (min,+)-convolution via (min,+) products).
@@ -89,9 +106,31 @@ encoding (after ImprovedExponents secs. 3-4)), at exact rational points. The sur
 only in their criterion; the construction itself is known (Credits). The 3SUM algorithm is a decision algorithm; a
 solution costs O(log n) more decisions, and we claim no listing version.
 
+**Theorem 1' (folded residue instances; `proofs/stacked.md`).** Same model. Deterministic all-edges Exact Triangle,
+(min,+)-product and APSP (no negative cycles) in O(n^{2.995943}) (sigma >= 0.004057248470, exact count + pruned
+encoding), and O(n^{2.996240}) with the paper's lemmas only (sigma >= 0.003760515625). The M residue instances of one
+Exact Triangle piece share their right matrix up to a column shift, so the decoding x M0 + y of the 3SUM route stacks
+them into one square product, which pays the encodings once on a side sqrt(M) n. Only the Theorem O hypothesis of
+these instances changes, from eps (E + gamma) < 1 to eps (E + gamma - 1/4) < 1; every other lemma of Theorem 1 is
+unchanged. 3SUM is not affected by this step.
+
 **Theorem 2 (hash-free route L1; `proofs/l1.md`).** Deterministic all-edges Exact Triangle, (min,+) product and APSP
 in O(n^2.99633), and 3SUM in O(n^1.99633) (S >= 0.003677999). With the paper's lemmas only: O(n^2.99657) and
 O(n^1.99657) (S >= 0.003431999). It uses no hashing at all, so it is an independent second route.
+
+**Theorem 3 (shared leaves in the pruned recursion, the band gain; `proofs/bands.md`, Theorem C').** Same model.
+Deterministic 3SUM in O(n^{1.995786}) (sigma >= 0.0042143770, upper end 1.995785623). Two simpler tiers give
+O(n^{1.995809}) (shifted keys with adjacent moves only, sigma >= 0.0041917719) and O(n^{1.995854}) (worst keys, no
+shift, sigma >= 0.0041463659). Without the zone moves of Rule Z (Theorem C of `bands.md`) the three tiers give
+O(n^{1.995790}), O(n^{1.995812}) and O(n^{1.995857}). Theorem 1 knows its wanted entries before each thin product, so
+it can use the paper's pruned recursion, whose cost is the number of leaves it reaches, in place of the box data
+structure. With residue buckets in place of interval groups, the wanted set is a union of translates (key fibres), and
+a leaf shared by several wanted entries is charged only to its lexicographically first one. The fraction of leaves
+that survive this charging is a carry-chain law in the keys: 22/27 per gap in the worst case, 62/81 under a
+deterministically chosen shift, and less with moves along whole stretches. In the low levels that carry Theorem 1's
+decoding digits, a move whose new term equals the old digit pair changes nothing but the cell, so a gap there blocks
+with law 8/9 for every key (Lemma Z). The tiers use the exact count + pruned encoding values of gamma and E. Exact
+Triangle and APSP do not gain from this step, as their wanted sets have no translation structure.
 
 **Remark (Las Vegas).** For integer weights, Las Vegas all-edges Exact Triangle and APSP run in O(n^2.99601) by an
 AND over independent random primes (`derandomisation.md`, Appendix B). This is KPP16's amplification on the paper's
@@ -105,27 +144,39 @@ eps' = 0.00175 behind 2.9983 for Exact Triangle. Ratios are rounded down.
 
 | model / problem | paper | ours | delta (paper) | delta (ours) | ratio |
 |---|---|---|---|---|---|
-| deterministic 3SUM | 1.9992 | **1.996001** (Theorem 1) | 0.000875 | 0.0039992 | x4.57 |
+| deterministic 3SUM | 1.9992 | **1.995786** (Theorem 3) | 0.000875 | 0.0042143 | x4.81 |
+| | | 1.995809 (Theorem 3, shifted keys, adjacent moves) | | 0.0041917 | x4.79 |
+| | | 1.995854 (Theorem 3, worst keys) | | 0.0041463 | x4.73 |
+| | | 1.995790 (Theorem 3 without zone moves) | | 0.0042108 | x4.81 |
+| | | 1.996001 (Theorem 1, version 1) | | 0.0039992 | x4.57 |
 | | | 1.996291 (Theorem 1, paper lemmas) | | 0.0037098 | x4.23 |
 | | | 1.99633 (Theorem 2) | | 0.0036779 | x4.20 |
-| deterministic Exact Triangle | 2.9983 (decision) | **2.996001** (Theorem 1, all-edges) | 0.00175 | 0.0039992 | x2.28 |
+| deterministic Exact Triangle | 2.9983 (decision) | **2.995943** (Theorem 1', all-edges) | 0.00175 | 0.0040572 | x2.31 |
+| | | 2.996001 (Theorem 1, all-edges, version 1) | | 0.0039992 | x2.28 |
 | | | 2.99633 (Theorem 2, all-edges) | | 0.0036779 | x2.10 |
-| deterministic (min,+) / APSP | 2.99942 | **2.996001** (Theorem 1) | 0.000583 | 0.0039992 | x6.85 |
+| deterministic (min,+) / APSP | 2.99942 | **2.995943** (Theorem 1') | 0.000583 | 0.0040572 | x6.95 |
+| | | 2.996240 (Theorem 1', paper lemmas) | | 0.0037605 | x6.44 |
+| | | 2.996001 (Theorem 1, version 1) | | 0.0039992 | x6.85 |
 | | | 2.996291 (Theorem 1, paper lemmas) | | 0.0037098 | x6.35 |
 | | | 2.99633 (Theorem 2) | | 0.0036779 | x6.30 |
 | Las Vegas APSP / ET, integer weights | 2.998 (real RAM, `thm:real`) | 2.99601 (remark) | 0.002 | 0.0039992 | x1.99 |
+
+Against version 1 of this repository, the saving grows by 5.3% for 3SUM (0.0039993 to 0.0042143, Theorem 3) and by
+1.4% for all-edges Exact Triangle, (min,+) and APSP (0.0039993 to 0.0040572, Theorem 1'); `bands3_cert.py` and
+`stacked_cert.py` print these ratios, rounded down from the certified endpoints (x1.0537 and x1.0144).
 
 The deterministic 3SUM bound is also below the paper's Las Vegas bound (1.998) and its randomised footnote figure
 (1.9965). ImprovedExponents improves the paper's own deterministic route to 1.99896 for 3SUM and 2.99791 for APSP.
 
 ### Corollaries (deterministic, same model)
 
-Each applies a cited reduction to the theorems above; `certificates/derand_cert.py` and `certify_L1.py` print them.
+Each applies a cited reduction to the theorems above; `certificates/bands3_cert.py`, `stacked_cert.py`,
+`derand_cert.py` and `certify_L1.py` print them.
 
 | problem | bound | route |
 |---|---|---|
-| Convolution-3SUM | O(n^1.996001) (Theorem 1); O(n^1.99633) (Theorem 2) | linear-time reduction to 3SUM, x_i = a_i (2n + 1) + i |
-| Zero-, Min- and Max-Weight k-Clique | n^{k - 0.0039992 floor(k/3)}, e.g. O(n^5.992002) for k = 6 | the paper's Nešetřil-Poljak folding to Exact Triangle on n^{floor(k/3)} vertices, on Theorem 1; Min/Max via VW13 as in the paper |
+| Convolution-3SUM | O(n^1.995786) (Theorem 3); O(n^1.996001) (Theorem 1); O(n^1.99633) (Theorem 2) | linear-time reduction to 3SUM, x_i = a_i (2n + 1) + i |
+| Zero-, Min- and Max-Weight k-Clique | O(n^{k - 0.004057 floor(k/3)}) for every k >= 3, e.g. O(n^5.991886) for k = 6 and O(n^8.987829) for k = 9 (Theorem 1'; version 1: n^{k - 0.0039992 floor(k/3)}) | the paper's Nešetřil-Poljak folding to Exact Triangle on n^{floor(k/3)} vertices, on Theorem 1'; Min/Max via VW13 as in the paper (`proofs/stacked.md`, Corollary E) |
 | (min,+)-convolution | n^{1.998162 + o(1)} = O(n^1.99817) | Theorem 2 and BCD14 (sqrt n (min,+) products of sqrt n x sqrt n matrices) |
 
 ## 3. The method in one page
@@ -158,19 +209,42 @@ with Fredman's trick as comparison counts, which the paper's Matoušek-style lem
 are found deterministically by Alon and Naor's dilution with the counting oracle. Queries, same-block pairs and boxes
 bind together (`certify_L1.py`).
 
+**Theorem 1': fold the residue instances.** For a modulus M, Theorem 1 builds M separate Exact Triangle instances per
+piece of C, one per residue of w(a, b), each of side n. Their right matrices are the same up to a shift of the column
+index, so one square product of side about sqrt(M) n, with rows (x, a) and columns (y, b), reads every count at the
+position given by r = w(a, b) mod M = x M0 - y. Boxes and queries cost what they cost before; the encodings are paid
+once on the larger side instead of M times, which relaxes the condition on eps to eps (E + gamma - 1/4) < 1.
+
+**Theorem 3: charge each shared leaf once.** The paper's pruned recursion visits the union of the leaves of the wanted
+entries, but the paper bounds that union by charging every entry for all its leaves of low order. Theorem 1's 3SUM
+route knows its wanted set before each product, so the pruned recursion can replace the box data structure there.
+With residue buckets (a prime chosen by collision counts, heavy residues recursed on) the wanted set is a union of
+key fibres. A leaf of order d has many members; it is charged only to the member whose d-set is lexicographically
+smallest, and an entry is charged for a leaf only when no element of the leaf's d-set can move to a lower free level
+inside the same fibre. Placing whole classes of inner sets (by their counts per segment of 8 levels) on single
+diagonals of the tile makes every such move available, and the fraction of blocked moves follows from the carry chain
+of the key (Lemmas 3.1 to 3.3 of `bands.md`). In the zone, where the levels hold the decoding digits x and y, a move
+is allowed only when the new term equals the old digit pair; the key is then unchanged, and one term in nine moves
+for every key (Lemma Z, Sec. 9 of `bands.md`).
+
 ## 4. Status: what is proved, certified, Lean-checked, sketched
 
 | item | status |
 |---|---|
 | Theorem 1 (`derandomisation.md`) | Full written proof. Two internal adversarial reviews: the first checked a sketch step by step; the second checked the full text, including the APSP chain, and found it correct (its qualifier, four textual fixes and stronger stress test are applied) |
+| Theorem 1', folded residue instances (`stacked.md`) | Full written proof; one internal adversarial review, which re-checked the decoding exhaustively for every modulus up to 5000 and found no gap |
+| Theorem 3, shared leaves (`bands.md`) | Full written proof; one internal adversarial review confirmed all three tiers of Theorem C (the stretch tier with the fewest independent checks) and recomputed every value independently; its requested changes are applied. A second internal adversarial review confirmed Lemma Z and Theorem C' (Sec. 9), with its own toy check and an independent recomputation of the three tiers |
 | Theorem 2, L1 (`l1.md`) | Full written proof; one internal adversarial review, after two fixes (3SUM window [-7, 8]; Alon-Naor bias 2^{-7c-1} for 3SUM) |
-| Corollaries | Compositions of Theorems 1 and 2 with the cited reductions; not separately reviewed |
+| Corollaries | Compositions of Theorems 1, 1', 2 and 3 with the cited reductions; not separately reviewed |
 | Remark, Las Vegas route (Appendix B) | Proof; one internal adversarial review |
 | Exact count and pruned encodings (Appendix A) | Short arguments on the paper's construction; reviewed once; public earlier, Lean-checked, in ImprovedExponents |
 | All saving values | arb ball arithmetic (200 bits) at fixed rational points, every side condition checked on the whole ball (`certificates/`) |
 | Negative triangle to Exact Triangle (Appendix C) | Proof; exhaustive and end-to-end checks against brute force with a negative control (`check_negtri.py`) |
+| Theorem 3's lemmas on small cases | Mechanical checks against brute force or exact enumeration: the canonical-representative bound on every leaf (including grids where the moves are used), the carry and stretch laws exhaustively, the class average exactly, and the residue buckets with their recursion; each has negative controls that must fail (`check_bands_*.py`). `tests/test_bands.py` also recomputes the three savings by an independent method. `tests/test_bands_zone.py` checks Lemma Z on toy grids by brute force over every leaf (no Rule-Z target leaves W, R_d equals the 8/9 generating function), with a wrapped-diagonal control that must fail, and recomputes the savings of Theorem C' |
+| Lemma 3.2' on small instances | The folded product against a direct count on 24746 slots, with two negative controls (`check_stacked.py`) |
 | Theorem 1's constructions on small instances | Mechanical check against brute force, including a stress run that exercises the greedy choice and asserts the halving lemmas on every chain, with three negative controls that must fail (`check_derand.py`, `check_derand_controls.py`) |
-| Lean (`lean/`) | Lean 4 kernel checks (Mathlib, standard axioms only, no `sorry` or `native_decide`) of the arithmetic of every certificate point in `derand_cert.py`, `certify_L1.py` and `certify.py`: each side condition, the saving and the 3SUM and APSP exponents (with the O(n^e) lines), at the exact rational point, with negative controls. Also the finite integer lemmas of Theorem 2 and Appendix C (bit-halving windows, Fredman's identity, the unique-witness test, the Alon-Naor bias, the negative-to-zero reduction). Not in Lean: the reductions and cost accounting, which are the paper proofs above, and `certify_levers.py` |
+| Lean (`lean/`) | Lean 4 kernel checks (Mathlib, standard axioms only, no `sorry` or `native_decide`) of the arithmetic of every certificate point in `derand_cert.py`, `certify_L1.py` and `certify.py`: each side condition, the saving and the 3SUM and APSP exponents (with the O(n^e) lines), at the exact rational point, with negative controls. Also the finite integer lemmas of Theorem 2 and Appendix C (bit-halving windows, Fredman's identity, the unique-witness test, the Alon-Naor bias, the negative-to-zero reduction). `Stacked.lean` and `KClique.lean` check the same for `stacked_cert.py` (Theorem 1') and its k-Clique corollary. Not in Lean: the reductions and cost accounting, which are the paper proofs above, and `certify_levers.py` |
+| Lean for Theorem 3 | Lean-checked (`lean/`, `Bands2*.lean` and `Bands3*.lean`; standard axioms only, no `sorry` or `native_decide`): the arithmetic of all three tiers of `bands3_cert.py` (Theorem C') and of `bands_cert.py` (Theorem C) at their exact rational points, with each side condition, the saving, the 3SUM exponent and the O(n^e) line (O(n^1.995854), O(n^1.995809), O(n^1.995786); without zone moves O(n^1.995857), O(n^1.995812), O(n^1.995790)), and four negative controls per tier. Also the 22/27 and 62/81 digit laws, the 8/9 zone law and the stretch law b(len) for len <= 7, by kernel computation. Not in Lean: the reductions and cost accounting (`bands.md`) and the probabilistic content of Lemmas 3.1 to 3.3 |
 | The paper's theorems | Assumed as published (its main theorems are Lean-formalised in anthropics/formal-math) |
 
 The mechanical checks test logic on small instances, not asymptotics. The arb certificates and their Lean versions
@@ -181,9 +255,9 @@ check arithmetic, not the reductions.
 Requires Python 3.9 or newer and `python-flint` (`pip install -r requirements.txt`; tested with 0.6.0).
 
 ```sh
-make              # all certificates, the mechanical checks and the tests on their printed values (about 15 s)
+make              # all certificates, the mechanical checks and the tests on their printed values (about 6 min)
 make certificates # the certificates and checks alone, printing every claim
-make lean         # the Lean 4 kernel checks (lean/README.md; elan with Lean v4.34.1, Mathlib cache; about 13 min on 3 cores)
+make lean         # the Lean 4 kernel checks (lean/README.md; elan with Lean v4.34.1, Mathlib cache; about 13 min on 3 cores, plus about 35 min on 2 cores for Theorem 3 and about 7 min for Theorem C')
 ```
 
 | script | prints |
@@ -194,8 +268,17 @@ make lean         # the Lean 4 kernel checks (lean/README.md; elan with Lean v4.
 | `certificates/certify.py` | the shared closed forms, and the paper's Theorem 17 route re-tuned (comparison only) |
 | `certificates/check_negtri.py` | Appendix C: identity, full reduction against brute force, negative control |
 | `certificates/check_derand.py`, `check_derand_controls.py` | Theorem 1's constructions against brute force (basic and stress runs), and three controls that must fail |
+| `certificates/stacked_cert.py` | Theorem 1' savings and exponents (both tiers), the k-Clique exponents for k = 3..12, Convolution-3SUM through Exact Triangle, the controls, and the ratios to version 1 and the paper |
+| `certificates/check_stacked.py` | Lemma 3.2' against a direct count, and two controls that must fail |
+| `certificates/bands_cert.py` | Theorem 3 savings and exponents (three tiers), the layout cost, the b = 1 control (Theorem 1's saving), two controls that must fail, Convolution-3SUM and the ratios to version 1 and the paper |
+| `certificates/bands3_cert.py` | Theorem 3 with zone moves (Theorem C'): savings and exponents (three tiers), the layout cost, two controls that reduce to `bands_cert.py` (zone law 1), two controls that must fail, Convolution-3SUM and the ratios to Theorem C, version 1 and the paper |
+| `certificates/check_bands_rep.py`, `check_bands_carry.py`, `check_bands_stretch.py`, `check_bands_segments.py`, `check_bands_buckets.py` | Lemmas 2.1-2.2, 3.1-3.2, 3.3, 4.1 and Sec. 6 of `bands.md` against brute force or exact enumeration, each with negative controls |
 
-`tests/test_certificates.py` runs each script once and checks its printed values against this README.
+The new scripts keep their output in a `.out` file next to them. `tests/test_certificates.py`, `tests/test_bands.py`
+and `tests/test_bands_zone.py` run each script once and check its printed values against this README (and the new
+scripts' output against the saved `.out` files); `test_bands.py` and `test_bands_zone.py` also recompute Theorem 3's
+savings independently, and `test_bands_zone.py` checks Lemma Z on toy grids. The mechanical checks and the new
+certificates refuse to run under `python -O`, which would strip their `assert` statements.
 
 ## Further notes
 
