@@ -1,0 +1,56 @@
+{
+ "paper_lemmas": {
+  "c": "22.21828",
+  "theta": "0.112064",
+  "a": "0.5",
+  "eps": "0.0535127",
+  "eta": "0.03466378",
+  "boxes": "rho",
+  "enc": "full"
+ },
+ "exact_count": {
+  "c": "20.78856",
+  "theta": "0.112251",
+  "a": "0.5",
+  "eps": "0.05724277",
+  "eta": "0.03437513",
+  "boxes": "exact",
+  "enc": "full"
+ },
+ "exact_count_free_density": {
+  "c": "21.38155",
+  "theta": "0.116562",
+  "a": "0.518518",
+  "eps": "0.05561926",
+  "eta": "0.03703601",
+  "boxes": "exact",
+  "enc": "full"
+ },
+ "exact_count_free_density_pruned_encoding": {
+  "c": "21.91529",
+  "theta": "0.116108",
+  "a": "0.51898",
+  "eps": "0.05519776",
+  "eta": "0.03796",
+  "boxes": "exact",
+  "enc": "pruned"
+ },
+ "paper_point": {
+  "c": "21",
+  "theta": "1/9",
+  "a": "0.5",
+  "eps": "1/18",
+  "eta": "0.032",
+  "boxes": "rho",
+  "enc": "full"
+ },
+ "paper_point_eps_R21": {
+  "c": "21",
+  "theta": "1/9",
+  "a": "0.5",
+  "eps": "0.0566745",
+  "eta": "0.032",
+  "boxes": "rho",
+  "enc": "full"
+ }
+}

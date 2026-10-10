@@ -1,0 +1,51 @@
+Deterministic 3SUM and APSP at the full thin-product saving
+Copyright 2026 Swapnil Jain
+
+This work builds on, and does not modify, the following:
+
+- Josh Alman and Virginia Vassilevska Williams, arXiv 2610.06783 (v1, October 2026): the thin-product theorem, the
+  reductions to it, and every lemma used here (Theorem 17, Theorem thm:singletech, Corollary cor:tradeoff, Lemmas
+  lem:realred and lem:cmp, the k-Clique folding), and the conclusion footnote that names the two routes made
+  deterministic here. Their main theorems are Lean-formalised by Anthropic (anthropics/formal-math, 3sum-apsp).
+- qawbecrdtey, github.com/qawbecrdtey/ImprovedExponents (published 2026-10-07, Lean): the exact leaf count and the
+  pruned encodings (its Sections 3 and 4), used in every figure labelled "exact count + pruned encodings", and a
+  Lean-checked (min,+) to all-edges Exact Triangle chain. We found the same re-tune improvements independently, but
+  theirs came first.
+- Timothy M. Chan and Moshe Lewenstein, STOC 2015 (arXiv 1502.05204): the deterministic pseudo-perfect
+  pseudo-additive family, built from small primes chosen one at a time by averaging over the survivors. Our chains
+  follow this construction. Earlier: Jeanette P. Schmidt and Alan Siegel, SIAM J. Comput. 1990, and Noga Alon and
+  Moni Naor, Algorithmica 1996, Sec. 4 (greedy covering by conditional expectations). Recent use: Nick Fischer,
+  STOC 2026 (arXiv 2603.27736).
+- Tsvi Kopelowitz, Seth Pettie and Ely Porat, SODA 2016: 3SUM to offline Set Disjointness with an AND over
+  independent hashes, the reduction derandomised here.
+- Timothy M. Chan and Yinzhan Xu, 2024 (arXiv 2310.11575): the deterministic hash-free bit halving and Fredman
+  reduction for Exact Triangle (route L1), and the random-prime false-positive bound.
+- Nick Fischer, Piotr Kaliciak and Adam Polak, ITCS 2024 (arXiv 2310.12913): interval groups (Lemma 3.3), the
+  residue sets of their Set Disjointness reduction, and prime-at-a-time moduli (Lemma 3.2).
+- Noga Alon and Moni Naor, Algorithmica 1996, Theorem 1: deterministic witnesses for Boolean products (route L1);
+  Uri Zwick, JACM 2002, for their use beyond Boolean products.
+- Virginia Vassilevska Williams and Ryan Williams (FOCS 2010, JACM 2018; and the 2013 negative-to-zero triangle
+  reduction of SIAM J. Comput. 2013, Theorem 3.3): the (min,+) to Negative Triangle search and the dyadic reduction.
+- Virginia Vassilevska Williams and Yinzhan Xu, 2020 (arXiv 2007.09318): the Monte Carlo Exact Triangle reduction
+  (Theorem 3.4, Proposition 3.8) behind the Las Vegas remark.
+- Timothy M. Chan, Virginia Vassilevska Williams and Yinzhan Xu, 2022 (arXiv 2203.08356): the comparison-count
+  reductions used by route L1.
+- Andreas Björklund, Thore Husfeldt, Petteri Kaski and Mikko Koivisto, 2010: trimmed Möbius inversion, the
+  trimmed-transform idea behind pruned encodings.
+- Cited reductions for the corollaries: the Nešetřil-Poljak k-Clique folding (1985) as used in the paper, and
+  Bremner et al. (BCD14) for (min,+)-convolution to (min,+) products.
+
+What is new here:
+- The survivor-restricted derandomisation of KPP16's AND (Theorem 1): the Chan-Lewenstein construction run with a
+  per-prime criterion that counts the 3-term false positives of the surviving queries through the counting oracle,
+  so that deterministic 3SUM keeps the whole thin-product saving.
+- The all-edges weight H (Theorem 1, all-edges Exact Triangle with no scans); its small-prime zero test is folklore.
+- The L1 composition (Theorem 2): Chan-Xu halving with the paper's counting oracle and Alon-Naor witnesses, with the
+  3SUM window and the Alon-Naor bias repaired.
+- The Las Vegas random-prime Exact Triangle variant (a remark; KPP16's amplification on the paper's instances).
+- The negative-to-zero triangle reduction written with the shift tau = 2h - w_ab, which fixes an off-by-one in our
+  earlier version, and checked end to end.
+- The arb certificates, the mechanical checks and the parameter points.
+
+Research, implementation and drafting were done with assistance from Claude
+(Anthropic). AI assistance is not independent review.
