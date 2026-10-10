@@ -1,3 +1,7 @@
+import sys as _sys
+# These checks rely on assert, which python -O strips; refuse to run there rather than pass silently.
+if not __debug__:
+    _sys.exit("refusing to run under python -O: the checks are assert statements")
 import sys; sys.argv=['x']
 src=open(__file__.rsplit('/',1)[0]+'/check_derand.py').read().split('# ---------- 3SUM')[0]
 exec(src)

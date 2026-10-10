@@ -1,6 +1,10 @@
 """Mechanical check of proofs/derandomisation.md on small instances (logic, not asymptotics): interval groups, the
 residue sets of Lemma 2.4, survivor-restricted greedy chains, the weight H of Lemma 3.3, and Lemmas 4.1-4.3, all
 against brute force. Standard library only. Usage: python check_derand.py"""
+import sys as _sys
+# These checks rely on assert, which python -O strips; refuse to run there rather than pass silently.
+if not __debug__:
+    _sys.exit("refusing to run under python -O: the checks are assert statements")
 import random, math, itertools
 random.seed(7)
 def primes(lo,hi): return [p for p in range(max(2,lo),hi) if all(p%d for d in range(2,int(p**.5)+1))]

@@ -9,6 +9,10 @@ That is compared with brute-force all-edges negative-triangle detection on exhau
 the boundary sums S = -2, -1, 0 present. Part 1 alone cannot catch a wrong shift: the shift is outside the identity.
 Negative control: the old shift tau = 2h - w_ab - 1 must FAIL part 2 (it detects S <= -2, so S = -1 is missed).
 Usage: python check_negtri.py   (pure Python, a few seconds)"""
+import sys as _sys
+# These checks rely on assert, which python -O strips; refuse to run there rather than pass silently.
+if not __debug__:
+    _sys.exit("refusing to run under python -O: the checks are assert statements")
 import itertools, random
 
 def rhs(v, t, tau, K):
