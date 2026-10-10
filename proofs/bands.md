@@ -1,10 +1,11 @@
-# Deterministic 3SUM in O(n^1.995786): shared leaves in the pruned recursion
+# Deterministic 3SUM in O(n^1.995782): shared leaves in the pruned recursion
 
 Base result: Alman and Vassilevska Williams, arXiv 2610.06783 ("the paper", AVW). Base route: Theorem A of
 `proofs/derandomisation.md` ("Theorem A"; its Sections 1 and 2 and Appendix A are used throughout). Certificate:
-`certificates/bands_cert.py` for Theorem C and `certificates/bands3_cert.py` for Theorem C' (Sec. 9) (arb, 200 bits,
+`certificates/bands_cert.py` for Theorem C, `certificates/bands3_cert.py` for Theorem C' (Sec. 9) and
+`certificates/bands4_cert.py` for Theorem C'' (Sec. 10, with the exact polynomials of `bands4_poly.py`) (arb, 200 bits,
 exact rational points, directed rounding). Mechanical checks on small cases: `certificates/check_bands_*.py` and
-`tests/test_bands_zone.py` (Secs. 8 and 9).
+`tests/test_bands_zone.py` (Secs. 8 to 10).
 
 **Review status.** One internal adversarial review checked every lemma below. It re-derived the generating function of
 Lemma 2.2 and the blocking laws of Sec. 3, recomputed every certified value with an independent implementation
@@ -13,7 +14,12 @@ independent checks of the three. It asked for three changes to this material, al
 computing the layout (Sec. 4), add check grids on which the moves are really used and run the worst-prime control (Sec.
 8), and credit the open lead of ImprovedExponents (Credits). A second internal adversarial review checked Sec. 9 (Lemma
 Z and Theorem C'), confirmed it, ran its own toy check of Lemma Z with a control that must fail, and recomputed the
-three tiers of Corollary D' with an independent implementation.
+three tiers of Corollary D' with an independent implementation. A third internal adversarial review checked Sec. 10
+(Lemma Y, the mixed segment lengths and Theorem C''), confirmed it, built its own segment polynomials by constructing
+every moved member's string (they agree exactly with `bands4_poly.json`), recomputed both points of Corollary D'' in
+arb, and ran its own end-to-end toy check with mixed segment lengths and three controls that must fail (now
+`check_bands_y.py`). It asked for the condition that a class fits a diagonal, now part of Theorem C'' and of the
+certificate, and for the limits at the end of Sec. 10 to be stated with their scope, as they are here.
 
 ## 0. Statement
 
@@ -57,6 +63,10 @@ time, so it is solved deterministically in O(n^{1.995790}) as well.
 *Zone moves.* Sec. 9 adds one move in the zone segments, where Theorem C allows none (Rule Z, Lemma Z). It changes
 only the zone term of q_eff and improves every tier: Theorem C' and Corollary D' give deterministic 3SUM in
 O(n^{1.995786}) (tier (C), upper end 1.995785623), O(n^{1.995809}) (S) and O(n^{1.995854}) (W).
+
+*Window moves per element.* Sec. 10 drops condition (a) and the stretch limit: every element of T is tested on its own
+against every outer level below it in its segment (Lemma Y), and the segments have lengths 8 and 9 in a fixed mix.
+Theorem C'' and Corollary D'' give deterministic 3SUM in O(n^{1.995782}) (tier (C), upper end 1.995781854).
 
 *Scope.* Theorem C improves 3SUM only. All-edges Exact Triangle and APSP do not gain from it: their query sets (the
 sets W_rho of Theorem A's Lemma 3.2) are not unions of translates in the sense of Sec. 2. Their improvement in this
@@ -387,6 +397,9 @@ sigma_0 is computed, so no step uses randomness. ∎
 | `bands_cert.py` | Corollary D, every condition of Theorem C on the whole ball, b = 1 gives Theorem A's saving | eps 1% too large; z = 2 |
 | `bands3_cert.py` | Corollary D' (Sec. 9), every condition of Theorem C' on the whole ball; zone law 1 gives back Corollary D's (C) value and Theorem A's saving | eps 1% too large; z = 2 |
 | `tests/test_bands_zone.py` | Lemma Z by brute force over every leaf on toy grids (Sec. 9) | one class split across a wrapped diagonal |
+| `bands4_poly.py` | the exact polynomials A_Y and A_ZY of Sec. 10 for lengths 8 and 9, cross-checked by a second implementation that builds every moved member's string | (a cross-check, not a control) |
+| `bands4_cert.py` | Corollary D'' (Sec. 10), every condition of Theorem C'' on the whole ball, including the diagonal fit; no sharing gives Theorem A's saving | eps 1% too large; z = 2; 2/5 of the segments of length 9; length 9 at theta = 1/50 (fails the diagonal fit only) |
+| `check_bands_y.py` | Lemma Y end to end on toy tiles with mixed segment lengths (Sec. 10) | a naive window that ignores the rank shift; targets in the segment below; Rule Y inside the zone |
 
 The saved outputs are the `.out` files next to each script. `tests/test_bands.py` checks the printed values,
 compares every run with its saved output, and recomputes the three savings by an independent method (a dynamic
@@ -483,3 +496,142 @@ every target is a member of the same leaf with the same strings and a lexicograp
 coefficient of the 8/9 generating function for every w, and |Leaves_d| <= sum R_d. Control (must fail): one class
 split across the two pieces of a wrapped diagonal sends 3416 targets outside W, so the integer-diagonal packing of Sec.
 4 is what the lemma uses.
+
+## 10. Window moves per element (Lemma Y), mixed segment lengths, and Theorem C''
+
+Theorem C' moves only the lowest element of T in its gap (condition (a)), and only inside the stretch of the gap. Both
+restrictions can go. Every element p of T can be tested on its own, against every outer level below it in its
+segment, across the levels of Q (in Z or in T) that lie in between. Those levels are inner for w and for the moved
+member, so they carry no digit, and the key test is still a window equation on w's own digits. This section proves
+that (Lemma Y), and then lets the segments have lengths 8 and 9 in a fixed pattern. Only tier (C) (shifted keys) is
+claimed; tiers (S) and (W) are unchanged.
+
+*Notation.* Fix a good cell Q, a position w in it and an order-d leaf tau of w, given by (T, terms). For p in T in
+segment s, let o_1 < ... < o_N be the outer levels of w in segment s below p, d_i the digit difference of w at the
+rank of o_i (column digit minus row digit), and t = j_p - i_p.
+
+*Rule Y.* In a non-zone segment, p is *Y-movable* if for some a <= N the member w' = w(T - p + o_a) has the key of w.
+In a zone segment, p is Y-movable if N >= 1 and (i_p, j_p) = (u, v), the digit pair of w at the rank of o_N (Rule Z for
+every element, with no condition (a)).
+
+**Lemma Y.** Let W be fibre-closed. In a non-zone segment, w' = w(T - p + o_a) has the key of w if and only if
+
+    d_a + 2 sum_{j=1}^{m} d_{a+j} 3^{j-1} = t 3^m,     m = N - a.
+
+If some p in T is Y-movable, w is not the representative of tau in W. Hence |Leaves_d(W_tile)| <= sum over w of
+R^Y_d(w), with
+
+    R^Y_d(w) = [z^d] prod_{p in Q} (1 + 9 b_p z),
+
+where b_p is the fraction of the nine terms at p for which p is not Y-movable (b_p = 1 if N = 0).
+*Proof.* The level o_a is outer for w, so it lies in F, T' = T - p + o_a is a d-subset of F, and w' is a member of
+tau. The levels p and o_a are in the same segment, so Q' = Q - p + o_a has the signature of Q. Its class sits whole on
+one integer diagonal (Sec. 4), so Q' is the inner set of a cell of the same tile with c' - r' = c - r. The outer
+levels of w' are those of w with o_a replaced by p. Every level outside segment s keeps its rank, and segment s keeps
+its number of outer levels, so the digits outside segment s do not change. In a non-zone segment every window rank is
+at least z0 (good signatures, Sec. 4), so x and y do not change. Inside segment s, the levels strictly between o_a and
+p that are not outer lie in Q (in Z or in T). They are inner for w and for w' (only p leaves Q', only o_a enters it),
+so they carry no digit. The outer levels of w' in segment s, in order, are o_1, ..., o_{a-1}, o_{a+1}, ..., o_N, p,
+and then the levels above p. So the digit sequence of w' differs from that of w only at the ranks of o_a, ..., o_N,
+where it reads d_{a+1}, ..., d_N, t. With rho the rank of o_a, the change in the integer of digit differences is
+
+    3^{rho - z0} [ sum_{i < m} d_{a+1+i} 3^i + t 3^m - sum_{i <= m} d_{a+i} 3^i ],
+
+which is 0 if and only if the displayed equation holds. Then k' - j' = k - j (the cell parts cancel as in Lemma 2.1,
+and sigma_0 is added to both), x and y are unchanged, and w' is in W. In a zone segment, every level strictly between
+o_N and p is in Q, so p takes the rank of o_N in w'. It carries (i_p, j_p) = (u, v), so both strings are unchanged
+and the key is unchanged, as in Lemma Z. In both cases the sorted T' is the sorted T with p replaced by o_a < p, and
+o_a is not in T, so T' is lexicographically smaller and w is not the representative. Whether p is Y-movable depends
+only on w and on the term at p. So the number of (T, terms) with no Y-movable element is
+sum_{|T| = d} prod_{p in T} 9 b_p = [z^d] prod_{p in Q} (1 + 9 b_p z). ∎
+
+Condition (a) was used in Sec. 2 only to make b_p a function of w and p, and for the lexicographic step. Neither
+needs it here. Rule Y contains the stretch moves of Sec. 2 (the case where o_a, ..., o_N is the stretch of p's gap and
+p is the lowest element of T in it) and the zone moves of Sec. 9, so R^Y_d(w) <= R_d(w) of Theorem C' for every w. The
+bound is one injection (each needed leaf to its representative), so nothing is counted twice.
+
+*Class average.* b_p depends only on Q ∩ segment s and on w's digits at the outer levels of segment s. Under the
+shifted law (Lemma 3.2) the digits at ranks >= z0 are independent with law pi, and under the class law the sets
+Q ∩ segment s are independent uniform n_s-subsets, so
+
+    average over the class of E_u prod_{p in Q} (1 + y b_p) = prod_{s < s0} A_ZY(lambda_s, n_s; y) prod_{s >= s0} A_Y(lambda_s, n_s; y),
+
+where A_Y(lambda, n; y) is the exact joint average over the n-subsets of a segment of length lambda and over its digits
+(the window factors are correlated inside a segment, so it is not a product of per-gap factors), and A_ZY is the same
+average with b_p = 8/9 when N >= 1. Both are polynomials in y with rational coefficients; `certificates/bands4_poly.py`
+computes them exactly for lambda = 8, 9 and cross-checks them with a second implementation that builds each moved
+member's string and compares integer values. For the shift of Lemma 3.4 the dynamic program carries the two carries
+and the digits of the current segment, at most 5^9 = O(1) states. The good-signature conditions use f2(n) = ln A_Y
+and f4(n) = ln A_ZY, both in [0, lambda ln(1 + 9z)], so Hoeffding's inequality gives the same failure bound as in Sec.
+4. Everything else (filler cells, partial band rows, the exact count, the encodings) is as in Secs. 4 and 5.
+
+*Mixed segment lengths.* Fix a period of 10 segments, 7 of length 8 and 3 of length 9 (83 levels), and repeat it; L
+is a multiple of 83 and of the denominators of c and theta, which costs o(1) in the exponent. Signatures and classes
+are defined per segment as before, a class has size prod_s C(lambda_s, n_s), and every move of Lemma Y stays in its
+segment, so segments of different lengths do not interact. The levels are still i.i.d. Bernoulli(1/c), so the
+signature law is that of independent Bin(lambda_s, 1/c) counts conditioned on their sum being mu, and P(sum = mu) >=
+1/(L + 1) as before. The zone segments are the first s0 segments; they have the period's mix up to O(1) segments. With
+w_l the fraction of segments of length l and Lbar = sum_l w_l l, the class average per key level is
+
+    Lambda''(z) = (c/Lbar) sum_l w_l E_{n ~ Bin(l, 1/c)} [ (1 - zeta) ln A_Y(l, n; 9z) + zeta ln A_ZY(l, n; 9z) ].
+
+The signatures number prod_s (lambda_s + 1), so e9 = eps c (sum_l w_l ln(l + 1)/Lbar)/ln 4.
+
+*A class fits a diagonal.* The packing of Sec. 4 places each good class whole on one integer diagonal, which needs
+ln(maxclass) < ln K0, that is
+
+    (c/Lbar) sum_l w_l E ln C(l, n)  <  (c/2) H(1/c).
+
+It holds at both points of Corollary D'' (by about 0.065 and 0.031 per key level), but it does not follow from
+q_fill < q_eff in general (that would need H(theta) + theta ln 9 >= q_eff ln 4), so Theorem C'' lists it as a condition
+of its own.
+
+**Theorem C''.** Let the segment pattern be (w_8, w_9) with w_8 + w_9 = 1, and define
+
+    q_eff''  = [ -theta ln z + Lambda''(z) ] / ln 4,
+    q_fill'' = [ (c/Lbar) sum_l w_l E ln C(l, n) - (c/2) H(1/c) + H(theta) + theta ln 9 ] / ln 4,
+    e_pre''  = eps c ( sum_l w_l ln(l + 1)/Lbar + H(1/c) ) / ln 4.
+
+If the conditions of Theorem C hold with q_eff'', q_fill'' and e_pre'' in place of q_eff, q_fill and e_pre, and a class
+fits a diagonal, then 3SUM is solved deterministically in time n^{2 - sigma + o(1)} (tier (C), shifted keys).
+*Proof.* Sec. 5 with Lemma Y and Lambda'' in place of Lemma 2.1 and Lambda: on good cells R^Y_d <= 3 z^{-d}
+e^{mu Lambda''(z) + o(mu)} per position, and the rest is charged as before. Secs. 6 and 7 are unchanged. ∎
+
+**Corollary D'' (values; exponents rounded up from the exact arb endpoints).** `bands4_cert.py` checks every condition
+of Theorem C'', including the diagonal fit, on the whole arb ball at these exact rational points:
+
+| tier (C), Lemma Y | pattern (w_8, w_9) | (c, theta, eps, z), exact | sigma >= | 3SUM |
+|---|---|---|---|---|
+| segment length 8 | (1, 0) | (21018799/1000000, 1176831/10000000, 143775683/2500000000, 190173/10000000) | 0.0042165295 | O(n^{1.995784}) |
+| lengths 8 and 9 | (7/10, 3/10) | (4203319/200000, 3679/31250, 115032221/2000000000, 190589/10000000) | 0.0042181468 | O(n^{1.995782}) |
+
+Nine-digit upper ends: 1.995783471 and 1.995781854 (Corollary D', tier (C): 1.995785623). The layout costs are
+e_pre <= 0.406309 and 0.400985. At the mixed point the binding term is eps (1/2 - q_eff''), with eps gamma and
+1 - eps E within 2e-8 of it, and q_fill'' is within 1.3e-3 of q_eff'': the filler condition is what limits the share of
+segments of length 9. So deterministic 3SUM, and Convolution-3SUM, are solved in O(n^{1.995782}).
+Controls of `bands4_cert.py`: with no sharing (A = (1 + y)^n) the formula gives Theorem A's saving 0.0039992840 at its
+point; and four points must fail: eps 1% too large, z = 2, a pattern with 2/5 of the segments of length 9 (q_fill'' >
+q_eff''), and length 9 alone at theta = 1/50, which fails the diagonal fit and no other condition.
+
+*Toy check of Lemma Y* (`certificates/check_bands_y.py`, exact). One tile per run, classes packed whole on integer
+diagonals in random order, real row and column labels with the shift sigma_0, and W a union of random key fibres. For
+every w in W and every order-d leaf of w, the representative is found by listing all members of the leaf. Six runs,
+(L, mu, segment lengths, z0, d) = (6, 2, (3, 3), 1, 1), (6, 2, (3, 3), 1, 2), (7, 3, (3, 4), 1, 1), (7, 2, (3, 4), 1,
+1), (7, 3, (4, 3), 1, 2) and (7, 2, (2, 5), 1, 1), so mixed segment lengths included: no Y target lies outside W, the
+number of leaves represented by w is at most R^Y_d(w) for every w, and R^Y_d(w) equals the coefficient of the
+generating function for every w. The moves are exercised: 4185 to 123091 moves per run with windows of two or more
+outer levels, moves across Z levels, and, at d = 2, 60192 and 65736 moves across T levels. Three controls must fail,
+and fail in every run: (A) the naive window "the key is kept iff d_a = t", which ignores the rank shift (8577 to
+374947 targets outside W); (B) targets in the segment below (41673 to 424440); (C) Rule Y inside the zone (16617 to
+201366).
+
+*Limits of this accounting.* (i) In a zone segment, a downward single swap inside the segment that keeps w's fibre
+must keep the row and the column string, so all its window digit pairs must equal the term at p, and every target
+needs the same term: b_p >= 8/9 for every key whenever the window lies at ranks < z0, which Rule Z attains. Zone
+elements whose window reaches ranks >= z0 (in the top zone segment) have ordinary Y moves; they are an o(1) fraction.
+(ii) For adjacent moves and any injective labelling of the row and column strings (input-dependent labellings
+included), with keys that are label differences, a move fixes the rest of the member, so the three values of i_p give
+three row labels, the three values of j_p give three column labels, and at most one j_p per i_p keeps the key: b >=
+2/3 per adjacent move [proof]. In the per-element accounting of this section, b_p = 2/3 for every element with an
+outer level below it gives a saving of about 0.004304, or about 0.004296 if the zone keeps law 8/9 [float optimum of
+the formula of Theorem C''], less than 1e-4 above Corollary D''. This bounds adjacent-move accounting only.

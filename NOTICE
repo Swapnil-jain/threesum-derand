@@ -54,7 +54,8 @@ What is new here:
   stacked into one square product, with the condition eps (E + gamma - 1/4) < 1; and its k-Clique values.
 - The shared-leaf bound for the pruned recursion (Theorem 3, proofs/bands.md): the canonical-representative lemma and
   its generating function, the blocking laws of integer keys and the choice of the shift, the layout by segment
-  signatures, and the deterministic residue buckets with heavy-bucket recursion.
+  signatures, the deterministic residue buckets with heavy-bucket recursion, the zone moves of Rule Z (Lemma Z), and
+  the per-element window moves of Lemma Y with a periodic mix of segment lengths 8 and 9 (Theorem C'').
 - The negative-to-zero triangle reduction written with the shift tau = 2h - w_ab, which fixes an off-by-one in our
   earlier version, and checked end to end.
 - The arb certificates, the mechanical checks and the parameter points.

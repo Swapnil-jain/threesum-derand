@@ -1,0 +1,48 @@
+(C) Lemma Y, segment lengths 8 and 9 (7/10, 3/10): CERTIFIED at c=4203319/200000, th=3679/31250, eps=115032221/2000000000, z=190589/10000000, pattern={'8': '7/10', '9': '3/10'}, law=Y/ZY
+   gamma=[0.073338694 +/- 3.47e-10] q_eff=[0.42666147 +/- 3.31e-9] q_fill=[0.42536073 +/- 2.18e-9] E=[17.313094 +/- 1.39e-7]
+   class fits a diagonal: ln(class)/mu <= 1.979195 vs ln(K0)/mu >= 2.010567
+   sigma >= 0.0042181468   3SUM exponent <= 1.995781854   e_pre <= 0.400985
+(C) Lemma Y, segment length 8: CERTIFIED at c=21018799/1000000, th=1176831/10000000, eps=143775683/2500000000, z=190173/10000000, pattern={'8': '1'}, law=Y/ZY
+   gamma=[0.073317878 +/- 2.87e-10] q_eff=[0.42668215 +/- 1.05e-11] q_fill=[0.40113512 +/- 3.91e-9] E=[17.314880 +/- 4.83e-7]
+   class fits a diagonal: ln(class)/mu <= 1.945854 vs ln(K0)/mu >= 2.010621
+   sigma >= 0.0042165295   3SUM exponent <= 1.995783471   e_pre <= 0.406309
+control: no sharing, length 8 (must give Theorem 1's saving): CERTIFIED at c=1329579/62500, th=111731/1000000, eps=28423/500000, z=139761/10000000, pattern={'8': '1'}, law=ONE/ONE
+   gamma=[0.070352998 +/- 3.66e-10] q_eff=[0.42964704 +/- 4.91e-9] q_fill=[0.37959985 +/- 3.12e-9] E=[17.520985 +/- 4.65e-7]
+   class fits a diagonal: ln(class)/mu <= 1.947405 vs ln(K0)/mu >= 2.016785
+   sigma >= 0.0039992840   3SUM exponent <= 1.996000716   e_pre <= 0.404987
+control: eps 1% too large (must FAIL): FAILED at c=4203319/200000, th=3679/31250, eps=11618254321/200000000000, z=190589/10000000, pattern={'8': '7/10', '9': '3/10'}, law=Y/ZY
+   failed: terms>0
+   failed: eps(E+gamma)<1
+   gamma=[0.073338694 +/- 3.47e-10] q_eff=[0.42666147 +/- 3.31e-9] q_fill=[0.42536073 +/- 2.18e-9] E=[17.313094 +/- 1.39e-7]
+   class fits a diagonal: ln(class)/mu <= 1.979195 vs ln(K0)/mu >= 2.010567
+   sigma >= -0.0057396540   3SUM exponent <= 2.005739654   e_pre <= 0.404995
+   (negative control: it must FAIL) OK
+control: z = 2 (must FAIL): FAILED at c=4203319/200000, th=3679/31250, eps=115032221/2000000000, z=2, pattern={'8': '7/10', '9': '3/10'}, law=Y/ZY
+   failed: 0<z<=1
+   failed: terms>0
+   failed: q*<1/2
+   gamma=[0.073338694 +/- 3.47e-10] q_eff=[1.8949006 +/- 3.03e-8] q_fill=[0.42536073 +/- 2.18e-9] E=[17.313094 +/- 1.39e-7]
+   class fits a diagonal: ln(class)/mu <= 1.979195 vs ln(K0)/mu >= 2.010567
+   sigma >= -0.0802292554   3SUM exponent <= 2.080229256   e_pre <= 0.400985
+   (negative control: it must FAIL) OK
+control: 2/5 of the segments of length 9, filler condition (must FAIL): FAILED at c=4203319/200000, th=3679/31250, eps=115032221/2000000000, z=190589/10000000, pattern={'8': '3/5', '9': '2/5'}, law=Y/ZY
+   failed: q_fill<q_eff
+   gamma=[0.073338694 +/- 3.47e-10] q_eff=[0.42661411 +/- 7.14e-10] q_fill=[0.43299891 +/- 3.04e-9] E=[17.313094 +/- 1.39e-7]
+   class fits a diagonal: ln(class)/mu <= 1.989784 vs ln(K0)/mu >= 2.010567
+   sigma >= 0.0038536422   3SUM exponent <= 1.996146358   e_pre <= 0.399291
+   (negative control: it must FAIL) OK
+control: length 9, theta = 1/50, class too big for a diagonal (must FAIL): FAILED at c=4203319/200000, th=1/50, eps=115032221/2000000000, z=190589/10000000, pattern={'9': '1'}, law=Y/ZY
+   failed: class fits a diagonal
+   gamma=[0.011684443 +/- 1.36e-10] q_eff=[0.14717288 +/- 3.52e-9] q_fill=[0.12969125 +/- 3.87e-9] E=[17.313094 +/- 1.39e-7]
+   class fits a diagonal: ln(class)/mu <= 2.048375 vs ln(K0)/mu >= 2.010567
+   sigma >= 0.0006720437   3SUM exponent <= 1.999327957   e_pre <= 0.389918
+   (negative control: it must FAIL) OK
+control: no sharing, length 8 (must give Theorem 1's saving): sigma >= 0.0039992840, in (0.0039992, 0.0039994): OK
+Both Lemma Y points beat Theorem C' tier (C): OK
+Comparisons, headline point, ratios rounded DOWN (our lower bound over the other saving's upper end):
+   over Theorem C' (sigma <= 0.004214377036): x1.00089
+   over Theorem 1 (sigma <= 0.003999289714): x1.0547
+   over the paper's deterministic 3SUM (eps'/2 = 0.000875): x4.820
+   deterministic 3SUM <= n^(1.995781854+o(1)) = O(n^1.995782)
+   deterministic Convolution-3SUM (linear-time reduction to 3SUM) <= n^(1.995781854+o(1)) = O(n^1.995782)
+ALL OK

@@ -1,1 +1,2 @@
 python-flint==0.6.0
+numpy==2.0.2

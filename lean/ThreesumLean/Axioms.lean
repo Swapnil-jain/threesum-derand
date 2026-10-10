@@ -3,6 +3,7 @@ import ThreesumLean.Finite
 import ThreesumLean.KClique
 import ThreesumLean.Bands2
 import ThreesumLean.Bands3
+import ThreesumLean.Bands4
 
 /-! Every checked theorem depends only on Lean's standard axioms (no `sorryAx`, no `native_decide`). -/
 
@@ -60,3 +61,15 @@ import ThreesumLean.Bands3
 #print axioms TS.bands3_C_fails_next_b
 #print axioms TS.bands3_C_fails_next_o
 #print axioms TS.bands3_C_fails_perturbed_eps
+#print axioms TS.coefY_one_vs_stretch
+#print axioms TS.bands4_C_full
+#print axioms TS.bands4_C8_full
+#print axioms TS.bands4_C_fails_next_s0
+#print axioms TS.bands4_C_fails_next_b
+#print axioms TS.bands4_C_fails_next_o
+#print axioms TS.bands4_C_fails_perturbed_eps
+#print axioms TS.bands4_C8_fails_next_s0
+#print axioms TS.bands4_C8_fails_next_b
+#print axioms TS.bands4_C8_fails_next_o
+#print axioms TS.bands4_C8_fails_perturbed_eps
+#print axioms TS.bands4_Fit9_fails_class_fits

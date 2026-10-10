@@ -132,3 +132,14 @@ Every route below lands on one of the n^2 endpoints of the thin-product accounti
 | Polynomial method (Razborov–Smolensky) for 3XOR or 3SUM | Membership in a set of size n has probabilistic degree about log n, giving n^{2.755} monomials already at c = 3 | [arg] | Razborov–Smolensky; Abboud–Williams–Yu; Dietzfelbinger–Schlag–Walzer (3XOR) |
 | Offline function inversion (3SUM-indexing structures) | Offline preprocessing must cover all n^2 pairs | [arg] | Fiat–Naor; Hellman; Golovnev et al. |
 | Block-Toeplitz structure (displacement rank) of the hashed product | The Fourier form is again a thin product with the same D^{1/2} blow-up, and the block correlations form a rank-one polynomial matrix with no inner sum for fast multiplication | [arg] | |
+
+## 8. Shared leaves in the pruned recursion (Theorem 3)
+
+Terms as in `proofs/bands.md`: a leaf shared by several wanted entries is charged to its representative, and an entry
+is charged only when no element of the leaf's d-set can move to a lower free level inside the same key fibre; b is
+the fraction of the nine terms at an element that cannot move.
+
+| idea | why it fails | status | credit |
+|---|---|---|---|
+| More single swaps in the zone segments (the levels that hold the decoding digits x and y) than Rule Z allows | Keeping x and y fixes the row and the column string, so every window digit pair must equal the new term and every target needs the same term: at most one of the nine terms moves, b >= 8/9 for every key, which Rule Z already attains. Model: downward single swaps inside one segment that land in the entry's own fibre, windows at ranks below z0 (the elements of the top zone segment whose window reaches higher ranks are an o(1) fraction) | [proof], internally reviewed | |
+| Relabel the row and column strings (any injective labelling, input-dependent allowed) or bucket by input-dependent additive maps, so that fewer adjacent moves are blocked | With a key that is a label difference, an adjacent move fixes the rest of the entry, so the three row terms give three row labels, the three column terms give three column labels, and at most one column term per row term keeps the key: b >= 2/3 per adjacent move. In the per-element accounting of Theorem C'' this caps the saving at about 0.004296 to 0.004304, less than 1e-4 above 0.0042181. Model: adjacent moves (to the nearest free level below), difference keys | [proof] (the law) + [float] (the cap value), internally reviewed | |

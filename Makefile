@@ -1,7 +1,7 @@
 PYTHON ?= python3
 .PHONY: verify certificates lean
 
-# Certificates and the tests on their printed values (python-flint, about 6 minutes on a laptop).
+# Certificates and the tests on their printed values (python-flint and numpy, about 9 minutes on a laptop).
 verify:
 	$(PYTHON) -m unittest discover -s tests -v
 
@@ -13,12 +13,14 @@ certificates:
 		&& $(PYTHON) stacked_cert.py && $(PYTHON) check_stacked.py \
 		&& $(PYTHON) bands_cert.py && $(PYTHON) check_bands_rep.py && $(PYTHON) check_bands_carry.py \
 		&& $(PYTHON) check_bands_stretch.py && $(PYTHON) check_bands_segments.py && $(PYTHON) check_bands_buckets.py \
-		&& $(PYTHON) bands3_cert.py
+		&& $(PYTHON) bands3_cert.py \
+		&& $(PYTHON) bands4_poly.py | cmp - bands4_poly.json && $(PYTHON) bands4_cert.py && $(PYTHON) check_bands_y.py
 
 # The Lean 4 kernel checks (lean/README.md): needs elan (Lean v4.34.1) and the Mathlib cache; about 13 min on 3 cores.
 # Stacked.lean (folded all-edges Exact Triangle) and KClique.lean (its k-Clique corollary) add about 2 min.
 # Bands2*.lean (the kernel check of certificates/bands_cert.py, Theorem 3) adds about 35 min on 2 cores.
 # Bands3*.lean (the kernel check of certificates/bands3_cert.py, Theorem C') adds about 7 min on 2 cores.
+# Bands4*.lean (the kernel check of certificates/bands4_cert.py, Theorem C'') adds about 7 min on 2 cores.
 lean:
 	cd lean && lake exe cache get && lake build ThreesumLean ThreesumLean.Stacked ThreesumLean.KClique \
-		ThreesumLean.Bands2 ThreesumLean.Bands3 && lake env lean ThreesumLean/Axioms.lean
+		ThreesumLean.Bands2 ThreesumLean.Bands3 ThreesumLean.Bands4 && lake env lean ThreesumLean/Axioms.lean
